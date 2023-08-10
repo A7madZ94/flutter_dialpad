@@ -3,7 +3,7 @@ library flutter_dialpad;
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
-import 'package:flutter_dtmf/dtmf.dart';
+import 'package:flutter_dtmf/flutter_dtmf.dart';
 
 class DialPad extends StatefulWidget {
   final ValueSetter<String>? makeCall;
@@ -90,7 +90,7 @@ class _DialPadState extends State<DialPad> {
 
   _setText(String? value) async {
     if ((widget.enableDtmf == null || widget.enableDtmf!) && value != null)
-      await Dtmf.playTone(
+       FlutterDtmf.playTone(
           digits: value.trim(), samplingRate: 8000, durationMs: 160);
 
     if (widget.keyPressed != null) widget.keyPressed!(value!);
@@ -330,11 +330,6 @@ class _DialButtonState extends State<DialButton>
               });
             });
           }
-        }
-      },
-      onLongPress: () {
-        if (widget.subtitle == "+" && this.widget.onTap != null) {
-          this.widget.onTap!(widget.subtitle);
         }
       },
       child: ClipOval(
