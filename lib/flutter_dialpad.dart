@@ -27,6 +27,8 @@ class DialPad extends StatefulWidget {
   final double? titleFontSize;
   final double? subTitleFontSize;
   final double? starIconSize;
+  final double? callIconSize;
+  final double? hashIconSize;
 
   DialPad({
     this.makeCall,
@@ -46,6 +48,8 @@ class DialPad extends StatefulWidget {
     this.titleFontSize,
     this.subTitleFontSize,
     this.starIconSize,
+    this.callIconSize,
+    this.hashIconSize,
   });
 
   @override
@@ -115,6 +119,8 @@ class _DialPadState extends State<DialPad> {
         titleFontSize: widget.titleFontSize,
         subTitleFontSize: widget.subTitleFontSize,
         starIconSize: widget.starIconSize,
+        callIconSize: widget.callIconSize,
+        hashIconSize: widget.hashIconSize,
       ));
     }
     //To Do: Fix this workaround for last row
@@ -176,6 +182,8 @@ class _DialPadState extends State<DialPad> {
                           titleFontSize: widget.titleFontSize,
                           subTitleFontSize: widget.subTitleFontSize,
                           starIconSize: widget.starIconSize,
+                          callIconSize: widget.callIconSize,
+                          hashIconSize: widget.hashIconSize,
                         ),
                       ),
               ),
@@ -231,6 +239,8 @@ class DialButton extends StatefulWidget {
   final double? titleFontSize;
   final double? subTitleFontSize;
   final double? starIconSize;
+  final double? callIconSize;
+  final double? hashIconSize;
 
   DialButton({
     this.key,
@@ -243,10 +253,12 @@ class DialButton extends StatefulWidget {
     this.iconColor,
     this.shouldAnimate,
     this.onTap,
-    this.buttonClipOvalRadius = 50,
+    this.buttonClipOvalRadius = 60,
     this.titleFontSize = 12,
     this.subTitleFontSize = 10,
     this.starIconSize = 15,
+    this.callIconSize = 15,
+    this.hashIconSize = 12,
   });
 
   @override
@@ -320,7 +332,8 @@ class _DialButtonState extends State<DialButton>
                                       Text(
                                         widget.title!,
                                         style: TextStyle(
-                                            fontSize: widget.titleFontSize ?? sizeFactor / 2,
+                                            fontSize: widget.titleFontSize ??
+                                                sizeFactor / 2,
                                             color: widget.textColor != null
                                                 ? widget.textColor
                                                 : Colors.black),
@@ -328,7 +341,9 @@ class _DialButtonState extends State<DialButton>
                                       if (!widget.hideSubtitle)
                                         Text(widget.subtitle!,
                                             style: TextStyle(
-                                                fontSize: widget.titleFontSize ?? sizeFactor / 3,
+                                                fontSize:
+                                                    widget.subTitleFontSize ??
+                                                        sizeFactor / 3,
                                                 color: widget.textColor != null
                                                     ? widget.textColor
                                                     : Colors.black))
@@ -342,14 +357,16 @@ class _DialButtonState extends State<DialButton>
                                       style: TextStyle(
                                           fontSize: widget.title == "*" &&
                                                   widget.subtitle == null
-                                              ?  widget.starIconSize ?? screenSize.height * 0.0862069
-                                              : widget.starIconSize ?? sizeFactor / 2,
+                                              ? widget.starIconSize ??
+                                                  screenSize.height * 0.0862069
+                                              : widget.hashIconSize ??
+                                                  sizeFactor / 2,
                                           color: widget.textColor != null
                                               ? widget.textColor
                                               : Colors.black),
                                     ))
                             : Icon(widget.icon,
-                                size: sizeFactor / 2,
+                                size: widget.callIconSize ?? sizeFactor / 2,
                                 color: widget.iconColor != null
                                     ? widget.iconColor
                                     : Colors.white)),
