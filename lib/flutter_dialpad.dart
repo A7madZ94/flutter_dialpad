@@ -55,7 +55,7 @@ class DialPad extends StatefulWidget {
     this.hashIconSize,
     this.dialOutputTextFontSize = 13,
     this.deleteButtonSize = 15,
-    this.plusFontSize,
+    this.plusFontSize = 4,
   });
 
   @override
@@ -268,7 +268,7 @@ class DialButton extends StatefulWidget {
     this.starIconSize = 15,
     this.callIconSize = 15,
     this.hashIconSize = 12,
-    this.plusFontSize = 4,
+    this.plusFontSize,
   });
 
   @override
