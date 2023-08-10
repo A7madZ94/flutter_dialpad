@@ -22,20 +22,31 @@ class DialPad extends StatefulWidget {
   final String? outputMask;
   final bool? enableDtmf;
 
-  DialPad(
-      {this.makeCall,
-      this.keyPressed,
-      this.hideDialButton,
-      this.hideSubtitle = false,
-      this.outputMask,
-      this.buttonColor,
-      this.buttonTextColor,
-      this.dialButtonColor,
-      this.dialButtonIconColor,
-      this.dialButtonIcon,
-      this.dialOutputTextColor,
-      this.backspaceButtonIconColor,
-      this.enableDtmf});
+  /// here is where I made some updates on the package
+  final double? buttonClipOvalRadius;
+  final double? titleFontSize;
+  final double? subTitleFontSize;
+  final double? starIconSize;
+
+  DialPad({
+    this.makeCall,
+    this.keyPressed,
+    this.hideDialButton,
+    this.hideSubtitle = false,
+    this.outputMask,
+    this.buttonColor,
+    this.buttonTextColor,
+    this.dialButtonColor,
+    this.dialButtonIconColor,
+    this.dialButtonIcon,
+    this.dialOutputTextColor,
+    this.backspaceButtonIconColor,
+    this.enableDtmf,
+    this.buttonClipOvalRadius,
+    this.titleFontSize,
+    this.subTitleFontSize,
+    this.starIconSize,
+  });
 
   @override
   _DialPadState createState() => _DialPadState();
@@ -100,6 +111,10 @@ class _DialPadState extends State<DialPad> {
         color: widget.buttonColor,
         textColor: widget.buttonTextColor,
         onTap: _setText,
+        buttonClipOvalRadius: widget.buttonClipOvalRadius,
+        titleFontSize: widget.titleFontSize,
+        subTitleFontSize: widget.subTitleFontSize,
+        starIconSize: widget.starIconSize,
       ));
     }
     //To Do: Fix this workaround for last row
@@ -147,12 +162,20 @@ class _DialPadState extends State<DialPad> {
                     ? Container()
                     : Center(
                         child: DialButton(
-                          icon: widget.dialButtonIcon != null ? widget.dialButtonIcon : Icons.phone,
-                          color: widget.dialButtonColor != null ? widget.dialButtonColor! : Colors.green,
+                          icon: widget.dialButtonIcon != null
+                              ? widget.dialButtonIcon
+                              : Icons.phone,
+                          color: widget.dialButtonColor != null
+                              ? widget.dialButtonColor!
+                              : Colors.green,
                           hideSubtitle: widget.hideSubtitle!,
                           onTap: (value) {
                             widget.makeCall!(_value);
                           },
+                          buttonClipOvalRadius: widget.buttonClipOvalRadius,
+                          titleFontSize: widget.titleFontSize,
+                          subTitleFontSize: widget.subTitleFontSize,
+                          starIconSize: widget.starIconSize,
                         ),
                       ),
               ),
@@ -202,17 +225,29 @@ class DialButton extends StatefulWidget {
   final Color? iconColor;
   final ValueSetter<String?>? onTap;
   final bool? shouldAnimate;
-  DialButton(
-      {this.key,
-      this.title,
-      this.subtitle,
-      this.hideSubtitle = false,
-      this.color,
-      this.textColor,
-      this.icon,
-      this.iconColor,
-      this.shouldAnimate,
-      this.onTap});
+
+  /// here is where I made some updates on the package
+  final double? buttonClipOvalRadius;
+  final double? titleFontSize;
+  final double? subTitleFontSize;
+  final double? starIconSize;
+
+  DialButton({
+    this.key,
+    this.title,
+    this.subtitle,
+    this.hideSubtitle = false,
+    this.color,
+    this.textColor,
+    this.icon,
+    this.iconColor,
+    this.shouldAnimate,
+    this.onTap,
+    this.buttonClipOvalRadius = 50,
+    this.titleFontSize = 12,
+    this.subTitleFontSize = 10,
+    this.starIconSize = 15,
+  });
 
   @override
   _DialButtonState createState() => _DialButtonState();
@@ -271,8 +306,8 @@ class _DialButtonState extends State<DialButton>
               animation: _colorTween,
               builder: (context, child) => Container(
                     color: _colorTween.value,
-                    height: sizeFactor,
-                    width: sizeFactor,
+                    height: widget.buttonClipOvalRadius ?? sizeFactor,
+                    width: widget.buttonClipOvalRadius ?? sizeFactor,
                     child: Center(
                         child: widget.icon == null
                             ? widget.subtitle != null
@@ -285,17 +320,18 @@ class _DialButtonState extends State<DialButton>
                                       Text(
                                         widget.title!,
                                         style: TextStyle(
-                                            fontSize: sizeFactor / 3,
+                                            fontSize: widget.titleFontSize ?? sizeFactor / 2,
                                             color: widget.textColor != null
                                                 ? widget.textColor
                                                 : Colors.black),
                                       ),
                                       if (!widget.hideSubtitle)
-                                      Text(widget.subtitle!,
-                                          style: TextStyle(
-                                              color: widget.textColor != null
-                                                  ? widget.textColor
-                                                  : Colors.black))
+                                        Text(widget.subtitle!,
+                                            style: TextStyle(
+                                                fontSize: widget.titleFontSize ?? sizeFactor / 3,
+                                                color: widget.textColor != null
+                                                    ? widget.textColor
+                                                    : Colors.black))
                                     ],
                                   )
                                 : Padding(
@@ -306,14 +342,14 @@ class _DialButtonState extends State<DialButton>
                                       style: TextStyle(
                                           fontSize: widget.title == "*" &&
                                                   widget.subtitle == null
-                                              ? screenSize.height * 0.0862069
-                                              : sizeFactor / 3,
+                                              ?  widget.starIconSize ?? screenSize.height * 0.0862069
+                                              : widget.starIconSize ?? sizeFactor / 2,
                                           color: widget.textColor != null
                                               ? widget.textColor
                                               : Colors.black),
                                     ))
                             : Icon(widget.icon,
-                                size: sizeFactor / 3,
+                                size: sizeFactor / 2,
                                 color: widget.iconColor != null
                                     ? widget.iconColor
                                     : Colors.white)),

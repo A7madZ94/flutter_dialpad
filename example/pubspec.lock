@@ -65,9 +65,11 @@ packages:
   flutter_dialpad:
     dependency: "direct dev"
     description:
-      path: ".."
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "7b93988e2370f6535f3c6f60a589988cdd40d957"
+      url: "https://github.com/A7madZ94/flutter_dialpad.git"
+    source: git
     version: "1.0.5"
   flutter_dtmf:
     dependency: transitive
