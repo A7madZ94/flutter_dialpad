@@ -200,29 +200,37 @@ class _DialPadState extends State<DialPad> {
                 child: Padding(
                   padding:
                       EdgeInsets.only(right: screenSize.height * 0.03685504),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.backspace,
-                      size: widget.deleteButtonSize ?? sizeFactor / 2,
-                      color: _value.length > 0
-                          ? (widget.backspaceButtonIconColor != null
-                              ? widget.backspaceButtonIconColor
-                              : Colors.white24)
-                          : Colors.white24,
-                    ),
-                    onPressed: _value.length == 0
-                        ? null
-                        : () {
-                            if (_value.length > 0) {
+                  child: GestureDetector(
+                      child: Icon(
+                        Icons.backspace,
+                        size: widget.deleteButtonSize ?? sizeFactor / 2,
+                        color: _value.length > 0
+                            ? (widget.backspaceButtonIconColor != null
+                                ? widget.backspaceButtonIconColor
+                                : Colors.white24)
+                            : Colors.white24,
+                      ),
+                      onTap: _value.length == 0
+                          ? null
+                          : () {
+                              if (_value.length > 0) {
+                                setState(() {
+                                  _value =
+                                      _value.substring(0, _value.length - 1);
+                                  textEditingController!.text = _value;
+                                });
+                              }
+                            },
+                      onLongPress: _value.length == 0
+                          ? null
+                          : () {
                               setState(() {
-                                _value = _value.substring(0, _value.length - 1);
-                                textEditingController!.text = _value;
+                                textEditingController!.clear();
+                                _value = "";
                               });
-                            }
-                          },
-                  ),
+                            }),
                 ),
-              )
+              ),
             ],
           )
         ],
@@ -322,6 +330,11 @@ class _DialButtonState extends State<DialButton>
               });
             });
           }
+        }
+      },
+      onLongPress: () {
+        if (widget.subtitle == "+" && this.widget.onTap != null) {
+          this.widget.onTap!(widget.subtitle);
         }
       },
       child: ClipOval(
