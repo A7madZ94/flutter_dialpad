@@ -126,7 +126,7 @@ class _DialPadState extends State<DialPad> {
         subTitleFontSize: widget.subTitleFontSize,
         starIconSize: widget.starIconSize,
         callIconSize: widget.callIconSize,
-        hashIconSize: widget.hashIconSize, 
+        hashIconSize: widget.hashIconSize,
         plusFontSize: widget.plusFontSize,
       ));
     }
@@ -250,7 +250,6 @@ class DialButton extends StatefulWidget {
   final double? callIconSize;
   final double? hashIconSize;
   final double? plusFontSize;
-  
 
   DialButton({
     this.key,
@@ -325,63 +324,65 @@ class _DialButtonState extends State<DialButton>
         }
       },
       child: ClipOval(
-          child: AnimatedBuilder(
-              animation: _colorTween,
-              builder: (context, child) => Container(
-                    color: _colorTween.value,
-                    height: widget.buttonClipOvalRadius ?? sizeFactor,
-                    width: widget.buttonClipOvalRadius ?? sizeFactor,
-                    child: Center(
-                        child: widget.icon == null
-                            ? widget.subtitle != null
-                                ? Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(
-                                        widget.title!,
-                                        style: TextStyle(
-                                            fontSize: widget.titleFontSize ??
-                                                sizeFactor / 2,
-                                            color: widget.textColor != null
-                                                ? widget.textColor
-                                                : Colors.black),
-                                      ),
-                                      if (!widget.hideSubtitle)
-                                        Text(widget.subtitle!,
-                                            style: TextStyle(
-                                                fontSize:
-                                                widget.subtitle == "+"  ?  widget.subTitleFontSize :
-                                                         widget.subTitleFontSize! + widget.plusFontSize!,
-                                                color: widget.textColor != null
-                                                    ? widget.textColor
-                                                    : Colors.black))
-                                    ],
-                                  )
-                                : Padding(
-                                    padding: EdgeInsets.only(
-                                        top: widget.title == "*" ? 10 : 0),
-                                    child: Text(
-                                      widget.title!,
-                                      style: TextStyle(
-                                          fontSize: widget.title == "*" &&
-                                                  widget.subtitle == null
-                                              ? widget.starIconSize ??
-                                                  screenSize.height * 0.0862069
-                                              : widget.hashIconSize ??
-                                                  sizeFactor / 2,
-                                          color: widget.textColor != null
-                                              ? widget.textColor
-                                              : Colors.black),
-                                    ))
-                            : Icon(widget.icon,
-                                size: widget.callIconSize ?? sizeFactor / 2,
-                                color: widget.iconColor != null
-                                    ? widget.iconColor
-                                    : Colors.white)),
-                  ),),),
+        child: AnimatedBuilder(
+          animation: _colorTween,
+          builder: (context, child) => Container(
+            color: _colorTween.value,
+            height: widget.buttonClipOvalRadius ?? sizeFactor,
+            width: widget.buttonClipOvalRadius ?? sizeFactor,
+            child: Center(
+                child: widget.icon == null
+                    ? widget.subtitle != null
+                        ? Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                widget.title!,
+                                style: TextStyle(
+                                    fontSize:
+                                        widget.titleFontSize ?? sizeFactor / 2,
+                                    color: widget.textColor != null
+                                        ? widget.textColor
+                                        : Colors.black),
+                              ),
+                              if (!widget.hideSubtitle)
+                                Text(widget.subtitle!,
+                                    style: TextStyle(
+                                        fontSize: widget.subtitle == "+"
+                                            ? widget.subTitleFontSize! +
+                                                widget.plusFontSize!
+                                            : widget.subTitleFontSize,
+                                        color: widget.textColor != null
+                                            ? widget.textColor
+                                            : Colors.black))
+                            ],
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(
+                                top: widget.title == "*" ? 10 : 0),
+                            child: Text(
+                              widget.title!,
+                              style: TextStyle(
+                                  fontSize: widget.title == "*" &&
+                                          widget.subtitle == null
+                                      ? widget.starIconSize ??
+                                          screenSize.height * 0.0862069
+                                      : widget.hashIconSize ?? sizeFactor / 2,
+                                  color: widget.textColor != null
+                                      ? widget.textColor
+                                      : Colors.black),
+                            ))
+                    : Icon(widget.icon,
+                        size: widget.callIconSize ?? sizeFactor / 2,
+                        color: widget.iconColor != null
+                            ? widget.iconColor
+                            : Colors.white)),
+          ),
+        ),
+      ),
     );
   }
 }
