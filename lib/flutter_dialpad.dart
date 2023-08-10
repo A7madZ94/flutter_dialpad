@@ -31,6 +31,7 @@ class DialPad extends StatefulWidget {
   final double? hashIconSize;
   final double? dialOutputTextFontSize;
   final double? deleteButtonSize;
+  final double? plusFontSize;
 
   DialPad({
     this.makeCall,
@@ -54,6 +55,7 @@ class DialPad extends StatefulWidget {
     this.hashIconSize,
     this.dialOutputTextFontSize = 13,
     this.deleteButtonSize = 15,
+    this.plusFontSize,
   });
 
   @override
@@ -124,7 +126,8 @@ class _DialPadState extends State<DialPad> {
         subTitleFontSize: widget.subTitleFontSize,
         starIconSize: widget.starIconSize,
         callIconSize: widget.callIconSize,
-        hashIconSize: widget.hashIconSize,
+        hashIconSize: widget.hashIconSize, 
+        plusFontSize: widget.plusFontSize,
       ));
     }
     //To Do: Fix this workaround for last row
@@ -188,6 +191,7 @@ class _DialPadState extends State<DialPad> {
                           starIconSize: widget.starIconSize,
                           callIconSize: widget.callIconSize,
                           hashIconSize: widget.hashIconSize,
+                          plusFontSize: widget.plusFontSize,
                         ),
                       ),
               ),
@@ -245,6 +249,8 @@ class DialButton extends StatefulWidget {
   final double? starIconSize;
   final double? callIconSize;
   final double? hashIconSize;
+  final double? plusFontSize;
+  
 
   DialButton({
     this.key,
@@ -263,6 +269,7 @@ class DialButton extends StatefulWidget {
     this.starIconSize = 15,
     this.callIconSize = 15,
     this.hashIconSize = 12,
+    this.plusFontSize = 4,
   });
 
   @override
@@ -346,8 +353,8 @@ class _DialButtonState extends State<DialButton>
                                         Text(widget.subtitle!,
                                             style: TextStyle(
                                                 fontSize:
-                                                    widget.subTitleFontSize ??
-                                                        sizeFactor / 3,
+                                                widget.subtitle == "+"  ?  widget.subTitleFontSize :
+                                                         widget.subTitleFontSize! + widget.plusFontSize!,
                                                 color: widget.textColor != null
                                                     ? widget.textColor
                                                     : Colors.black))

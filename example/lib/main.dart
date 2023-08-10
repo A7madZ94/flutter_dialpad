@@ -34,6 +34,8 @@ class _MyAppState extends State<MyApp> {
           starIconSize: 35,
           callIconSize: 25,
           hashIconSize: 20,
+          deleteButtonSize: 30,
+          dialOutputTextFontSize: 25,
         )),
       ),
     );
