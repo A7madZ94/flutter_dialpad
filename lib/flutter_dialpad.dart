@@ -29,6 +29,8 @@ class DialPad extends StatefulWidget {
   final double? starIconSize;
   final double? callIconSize;
   final double? hashIconSize;
+  final double? dialOutputTextFontSize;
+  final double? deleteButtonSize;
 
   DialPad({
     this.makeCall,
@@ -50,6 +52,8 @@ class DialPad extends StatefulWidget {
     this.starIconSize,
     this.callIconSize,
     this.hashIconSize,
+    this.dialOutputTextFontSize = 13,
+    this.deleteButtonSize = 15,
   });
 
   @override
@@ -147,7 +151,7 @@ class _DialPadState extends State<DialPad> {
               readOnly: true,
               style: TextStyle(
                   color: widget.dialOutputTextColor ?? Colors.black,
-                  fontSize: sizeFactor / 2),
+                  fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
               textAlign: TextAlign.center,
               decoration: InputDecoration(border: InputBorder.none),
               controller: textEditingController,
@@ -194,7 +198,7 @@ class _DialPadState extends State<DialPad> {
                   child: IconButton(
                     icon: Icon(
                       Icons.backspace,
-                      size: sizeFactor / 2,
+                      size: widget.deleteButtonSize ?? sizeFactor / 2,
                       color: _value.length > 0
                           ? (widget.backspaceButtonIconColor != null
                               ? widget.backspaceButtonIconColor
@@ -370,7 +374,7 @@ class _DialButtonState extends State<DialButton>
                                 color: widget.iconColor != null
                                     ? widget.iconColor
                                     : Colors.white)),
-                  ))),
+                  ),),),
     );
   }
 }

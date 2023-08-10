@@ -30,8 +30,10 @@ class _MyAppState extends State<MyApp> {
           },
           buttonClipOvalRadius: 60,
           titleFontSize: 20,
-          subTitleFontSize: 8,
+          subTitleFontSize: 10,
           starIconSize: 35,
+          callIconSize: 25,
+          hashIconSize: 20,
         )),
       ),
     );
