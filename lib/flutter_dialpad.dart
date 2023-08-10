@@ -285,7 +285,7 @@ class _DialButtonState extends State<DialButton>
                                       Text(
                                         widget.title!,
                                         style: TextStyle(
-                                            fontSize: sizeFactor / 2,
+                                            fontSize: sizeFactor / 3,
                                             color: widget.textColor != null
                                                 ? widget.textColor
                                                 : Colors.black),
@@ -307,13 +307,13 @@ class _DialButtonState extends State<DialButton>
                                           fontSize: widget.title == "*" &&
                                                   widget.subtitle == null
                                               ? screenSize.height * 0.0862069
-                                              : sizeFactor / 2,
+                                              : sizeFactor / 3,
                                           color: widget.textColor != null
                                               ? widget.textColor
                                               : Colors.black),
                                     ))
                             : Icon(widget.icon,
-                                size: sizeFactor / 2,
+                                size: sizeFactor / 3,
                                 color: widget.iconColor != null
                                     ? widget.iconColor
                                     : Colors.white)),
