@@ -90,7 +90,8 @@ class _DialPadState extends State<DialPad> {
 
   _setText(String? value) async {
     if ((widget.enableDtmf == null || widget.enableDtmf!) && value != null)
-      Dtmf.playTone(digits: value.trim(), samplingRate: 8000, durationMs: 160);
+      await Dtmf.playTone(
+          digits: value.trim(), samplingRate: 8000, durationMs: 160);
 
     if (widget.keyPressed != null) widget.keyPressed!(value!);
 
