@@ -67,7 +67,6 @@ class DialPad extends StatefulWidget {
 class _DialPadState extends State<DialPad> {
   MaskedTextController? textEditingController;
   var _value = "";
-  var _inputValue = "";
   var mainTitle = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "＃"];
   var subTitle = [
     "",
@@ -127,6 +126,7 @@ class _DialPadState extends State<DialPad> {
         textColor: widget.buttonTextColor,
         onTap: (value) {
           if (_value.length > 13) return;
+          print('click 4 ${value!.length}');
           _setText(value);
         },
         buttonClipOvalRadius: widget.buttonClipOvalRadius,
@@ -161,8 +161,7 @@ class _DialPadState extends State<DialPad> {
             child: TextFormField(
               // readOnly: true,
               onChanged: (val) {
-                _inputValue = val;
-                print(_inputValue.length);
+                _value = val;
               },
               style: TextStyle(
                   color: widget.dialOutputTextColor ?? Colors.black,
@@ -216,13 +215,13 @@ class _DialPadState extends State<DialPad> {
                       child: Icon(
                         Icons.backspace,
                         size: widget.deleteButtonSize ?? sizeFactor / 2,
-                        color: (_value.length > 0 || _inputValue.length > 0)
+                        color: _value.length > 0
                             ? (widget.backspaceButtonIconColor != null
                                 ? widget.backspaceButtonIconColor
                                 : Colors.white24)
                             : Colors.white24,
                       ),
-                      onTap: (_value.length > 0 || _inputValue.length > 0)
+                      onTap: _value.length > 0
                           ? () {
                               if (_value.length > 0) {
                                 setState(() {
@@ -230,25 +229,14 @@ class _DialPadState extends State<DialPad> {
                                       _value.substring(0, _value.length - 1);
                                   textEditingController!.text = _value;
                                 });
-                              } else {
-                                print('_inputValue $_inputValue');
-                                setState(() {
-                                  _inputValue = _inputValue.substring(
-                                      0, _inputValue.length - 1);
-                                  print('_inputValue $_inputValue');
-                                  textEditingController!.text = _inputValue;
-                                  print(
-                                      '_inputValue ${textEditingController!.text.length}');
-                                });
                               }
                             }
                           : null,
-                      onLongPress: (_value.length > 0 || _inputValue.length > 0)
+                      onLongPress: _value.length > 0
                           ? () {
                               setState(() {
                                 textEditingController!.clear();
                                 _value = "";
-                                _inputValue = "";
                               });
                             }
                           : null,
