@@ -21,7 +21,6 @@ class DialPad extends StatefulWidget {
   // outputMask is the mask applied to the output text. Defaults to (000) 000-0000
   final String? outputMask;
   final bool? enableDtmf;
-  
 
   /// here is where I made some updates on the package
   final double? buttonClipOvalRadius;
@@ -99,8 +98,10 @@ class _DialPadState extends State<DialPad> {
     if (widget.keyPressed != null) widget.keyPressed!(value!);
 
     setState(() {
-      _value += value!;
-      textEditingController!.text = _value;
+      if (textEditingController!.text.length <= 14) {
+        _value += value!;
+        textEditingController!.text = _value;
+      }
     });
   }
 
@@ -160,7 +161,8 @@ class _DialPadState extends State<DialPad> {
                   color: widget.dialOutputTextColor ?? Colors.black,
                   fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
               textAlign: TextAlign.center,
-              decoration: widget.inputDecoration ?? InputDecoration(border: InputBorder.none),
+              decoration: widget.inputDecoration ??
+                  InputDecoration(border: InputBorder.none),
               controller: textEditingController,
             ),
           ),
@@ -201,21 +203,21 @@ class _DialPadState extends State<DialPad> {
               ),
               Expanded(
                 child: Padding(
-                  padding:
-                      EdgeInsets.only(right: screenSize.height * 0.03685504),
-                  child: GestureDetector(
+                    padding:
+                        EdgeInsets.only(right: screenSize.height * 0.03685504),
+                    child: GestureDetector(
                       child: Icon(
                         Icons.backspace,
                         size: widget.deleteButtonSize ?? sizeFactor / 2,
-                        color: _value.length > 0 || textEditingController!.value.text.length  > 0
+                        color: _value.length > 0 ||
+                                textEditingController!.text.length > 0
                             ? (widget.backspaceButtonIconColor != null
                                 ? widget.backspaceButtonIconColor
                                 : Colors.white24)
                             : Colors.white24,
                       ),
-                      onTap: _value.length == 0
-                          ? null
-                          : () {
+                      onTap: (_value.length > 0  ||  textEditingController!.text.length > 0)
+                          ? () {
                               if (_value.length > 0) {
                                 setState(() {
                                   _value =
@@ -223,16 +225,17 @@ class _DialPadState extends State<DialPad> {
                                   textEditingController!.text = _value;
                                 });
                               }
-                            },
-                      onLongPress: _value.length == 0
-                          ? null
-                          : () {
+                            }
+                          : null,
+                      onLongPress: (_value.length > 0  ||  textEditingController!.text.length > 0)
+                          ? () {
                               setState(() {
                                 textEditingController!.clear();
                                 _value = "";
                               });
-                            }),
-                ),
+                            }
+                          : null,
+                    )),
               ),
             ],
           )
