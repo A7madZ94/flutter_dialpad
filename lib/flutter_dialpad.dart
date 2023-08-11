@@ -126,7 +126,7 @@ class _DialPadState extends State<DialPad> {
         textColor: widget.buttonTextColor,
         onTap: (value) {
           if (_value.length > 13) return;
-          print('click 4 ${value!.length}');
+          print('click ${_value.length}');
           _setText(value);
         },
         buttonClipOvalRadius: widget.buttonClipOvalRadius,
@@ -161,7 +161,10 @@ class _DialPadState extends State<DialPad> {
             child: TextFormField(
               // readOnly: true,
               onChanged: (val) {
-                _value = val;
+                setState(() {
+                  _value = val;
+                  print(_value);
+                });
               },
               style: TextStyle(
                   color: widget.dialOutputTextColor ?? Colors.black,
