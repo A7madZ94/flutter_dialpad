@@ -100,7 +100,7 @@ class _DialPadState extends State<DialPad> {
     setState(() {
       _value += value!;
       textEditingController!.text = _value;
-      print(_value.length);
+
     });
   }
 
@@ -125,8 +125,7 @@ class _DialPadState extends State<DialPad> {
         color: widget.buttonColor,
         textColor: widget.buttonTextColor,
         onTap: (value) {
-          if (_value.length > 13) return;
-          print('click ${_value.length}');
+          if (_value.length > 14) return;
           _setText(value);
         },
         buttonClipOvalRadius: widget.buttonClipOvalRadius,
@@ -163,7 +162,6 @@ class _DialPadState extends State<DialPad> {
               onChanged: (val) {
                 setState(() {
                   _value = val;
-                  print(_value);
                 });
               },
               style: TextStyle(
