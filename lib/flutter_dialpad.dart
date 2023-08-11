@@ -92,7 +92,6 @@ class _DialPadState extends State<DialPad> {
   }
 
   _setText(String? value) async {
-    if (_value.length > 14) return;
     if ((widget.enableDtmf == null || widget.enableDtmf!) && value != null)
       FlutterDtmf.playTone(
           digits: value.trim(), samplingRate: 8000, durationMs: 160);
@@ -126,7 +125,10 @@ class _DialPadState extends State<DialPad> {
         hideSubtitle: widget.hideSubtitle!,
         color: widget.buttonColor,
         textColor: widget.buttonTextColor,
-        onTap: _setText,
+        onTap: (value) {
+          if (_value.length > 13) return;
+          _setText(value);
+        },
         buttonClipOvalRadius: widget.buttonClipOvalRadius,
         titleFontSize: widget.titleFontSize,
         subTitleFontSize: widget.subTitleFontSize,
@@ -214,7 +216,7 @@ class _DialPadState extends State<DialPad> {
                       child: Icon(
                         Icons.backspace,
                         size: widget.deleteButtonSize ?? sizeFactor / 2,
-                        color: _value.length > 0 || _inputValue.length > 0
+                        color: (_value.length > 0 || _inputValue.length > 0)
                             ? (widget.backspaceButtonIconColor != null
                                 ? widget.backspaceButtonIconColor
                                 : Colors.white24)
@@ -229,10 +231,14 @@ class _DialPadState extends State<DialPad> {
                                   textEditingController!.text = _value;
                                 });
                               } else {
+                                print('_inputValue $_inputValue');
                                 setState(() {
                                   _inputValue = _inputValue.substring(
                                       0, _inputValue.length - 1);
+                                  print('_inputValue $_inputValue');
                                   textEditingController!.text = _inputValue;
+                                  print(
+                                      '_inputValue ${textEditingController!.text.length}');
                                 });
                               }
                             }
