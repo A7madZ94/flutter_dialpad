@@ -92,6 +92,7 @@ class _DialPadState extends State<DialPad> {
   }
 
   _setText(String? value) async {
+    if (_value.length > 14) return;
     if ((widget.enableDtmf == null || widget.enableDtmf!) && value != null)
       FlutterDtmf.playTone(
           digits: value.trim(), samplingRate: 8000, durationMs: 160);
@@ -99,11 +100,9 @@ class _DialPadState extends State<DialPad> {
     if (widget.keyPressed != null) widget.keyPressed!(value!);
 
     setState(() {
-      if (_value.length <= 14) {
-        _value += value!;
-        textEditingController!.text = _value;
-        print(textEditingController!.text.length);
-      }
+      _value += value!;
+      textEditingController!.text = _value;
+      print(_value.length);
     });
   }
 
@@ -161,6 +160,7 @@ class _DialPadState extends State<DialPad> {
               // readOnly: true,
               onChanged: (val) {
                 _inputValue = val;
+                print(_inputValue.length);
               },
               style: TextStyle(
                   color: widget.dialOutputTextColor ?? Colors.black,
