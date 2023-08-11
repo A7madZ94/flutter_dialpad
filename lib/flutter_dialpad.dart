@@ -67,6 +67,7 @@ class DialPad extends StatefulWidget {
 class _DialPadState extends State<DialPad> {
   MaskedTextController? textEditingController;
   var _value = "";
+  var _inputValue = "";
   var mainTitle = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "＃"];
   var subTitle = [
     "",
@@ -98,7 +99,7 @@ class _DialPadState extends State<DialPad> {
     if (widget.keyPressed != null) widget.keyPressed!(value!);
 
     setState(() {
-      if (textEditingController!.text.length <= 14) {
+      if (_value.length <= 14) {
         _value += value!;
         textEditingController!.text = _value;
         print(textEditingController!.text.length);
@@ -159,7 +160,7 @@ class _DialPadState extends State<DialPad> {
             child: TextFormField(
               // readOnly: true,
               onChanged: (val) {
-                print(val);
+                _inputValue = val;
               },
               style: TextStyle(
                   color: widget.dialOutputTextColor ?? Colors.black,
@@ -213,15 +214,13 @@ class _DialPadState extends State<DialPad> {
                       child: Icon(
                         Icons.backspace,
                         size: widget.deleteButtonSize ?? sizeFactor / 2,
-                        color: _value.length > 0 ||
-                                textEditingController!.text.length > 0
+                        color: _value.length > 0 || _inputValue.length > 0
                             ? (widget.backspaceButtonIconColor != null
                                 ? widget.backspaceButtonIconColor
                                 : Colors.white24)
                             : Colors.white24,
                       ),
-                      onTap: (_value.length > 0 ||
-                              textEditingController!.text.length > 0)
+                      onTap: (_value.length > 0 || _inputValue.length > 0)
                           ? () {
                               if (_value.length > 0) {
                                 setState(() {
@@ -229,15 +228,21 @@ class _DialPadState extends State<DialPad> {
                                       _value.substring(0, _value.length - 1);
                                   textEditingController!.text = _value;
                                 });
+                              } else {
+                                setState(() {
+                                  _inputValue = _inputValue.substring(
+                                      0, _inputValue.length - 1);
+                                  textEditingController!.text = _inputValue;
+                                });
                               }
                             }
                           : null,
-                      onLongPress: (_value.length > 0 ||
-                              textEditingController!.text.length > 0)
+                      onLongPress: (_value.length > 0 || _inputValue.length > 0)
                           ? () {
                               setState(() {
                                 textEditingController!.clear();
                                 _value = "";
+                                _inputValue = "";
                               });
                             }
                           : null,
