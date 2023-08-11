@@ -207,7 +207,7 @@ class _DialPadState extends State<DialPad> {
                       child: Icon(
                         Icons.backspace,
                         size: widget.deleteButtonSize ?? sizeFactor / 2,
-                        color: _value.length > 0
+                        color: _value.length > 0 || textEditingController!.text.length > 0
                             ? (widget.backspaceButtonIconColor != null
                                 ? widget.backspaceButtonIconColor
                                 : Colors.white24)
@@ -374,7 +374,7 @@ class _DialButtonState extends State<DialButton>
                           )
                         : Padding(
                             padding: EdgeInsets.only(
-                                top: widget.title == "*" ? 0 : 0),
+                                top: widget.title == "*" ? 6 : 0),
                             child: Text(
                               widget.title!,
                               style: TextStyle(
