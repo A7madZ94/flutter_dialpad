@@ -67,7 +67,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: f23de8c536635796b36f055c856a6d67efb837b9
+      resolved-ref: "1391a475cf6b5d6986a0050d860559687be3e934"
       url: "https://github.com/A7madZ94/flutter_dialpad.git"
     source: git
     version: "1.0.5"
@@ -75,10 +75,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_dtmf
-      sha256: "0064a8d2f0d06b4b8e7cea1f78017fc2a70d2d59c004d8c2b837ac4d222bb95a"
+      sha256: "37f491d4c20901a8987c002a5a6e847a47f1817beabcf8079dc017ce7ab9fcbc"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "1.0.2"
   flutter_masked_text2:
     dependency: transitive
     description:
