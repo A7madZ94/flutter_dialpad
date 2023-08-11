@@ -101,6 +101,7 @@ class _DialPadState extends State<DialPad> {
       if (textEditingController!.text.length <= 14) {
         _value += value!;
         textEditingController!.text = _value;
+        print(textEditingController!.text.length);
       }
     });
   }
@@ -157,6 +158,9 @@ class _DialPadState extends State<DialPad> {
             padding: EdgeInsets.all(20),
             child: TextFormField(
               // readOnly: true,
+              onChanged: (val) {
+                print(val);
+              },
               style: TextStyle(
                   color: widget.dialOutputTextColor ?? Colors.black,
                   fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
@@ -216,7 +220,8 @@ class _DialPadState extends State<DialPad> {
                                 : Colors.white24)
                             : Colors.white24,
                       ),
-                      onTap: (_value.length > 0  ||  textEditingController!.text.length > 0)
+                      onTap: (_value.length > 0 ||
+                              textEditingController!.text.length > 0)
                           ? () {
                               if (_value.length > 0) {
                                 setState(() {
@@ -227,7 +232,8 @@ class _DialPadState extends State<DialPad> {
                               }
                             }
                           : null,
-                      onLongPress: (_value.length > 0  ||  textEditingController!.text.length > 0)
+                      onLongPress: (_value.length > 0 ||
+                              textEditingController!.text.length > 0)
                           ? () {
                               setState(() {
                                 textEditingController!.clear();
