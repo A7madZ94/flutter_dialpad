@@ -21,6 +21,7 @@ class DialPad extends StatefulWidget {
   // outputMask is the mask applied to the output text. Defaults to (000) 000-0000
   final String? outputMask;
   final bool? enableDtmf;
+  
 
   /// here is where I made some updates on the package
   final double? buttonClipOvalRadius;
@@ -32,6 +33,7 @@ class DialPad extends StatefulWidget {
   final double? dialOutputTextFontSize;
   final double? deleteButtonSize;
   final double? plusFontSize;
+  final InputDecoration? inputDecoration;
 
   DialPad({
     this.makeCall,
@@ -55,7 +57,8 @@ class DialPad extends StatefulWidget {
     this.hashIconSize,
     this.dialOutputTextFontSize = 13,
     this.deleteButtonSize = 15,
-    this.plusFontSize = 4,
+    this.plusFontSize = 2,
+    this.inputDecoration = const InputDecoration(border: InputBorder.none),
   });
 
   @override
@@ -90,7 +93,7 @@ class _DialPadState extends State<DialPad> {
 
   _setText(String? value) async {
     if ((widget.enableDtmf == null || widget.enableDtmf!) && value != null)
-       FlutterDtmf.playTone(
+      FlutterDtmf.playTone(
           digits: value.trim(), samplingRate: 8000, durationMs: 160);
 
     if (widget.keyPressed != null) widget.keyPressed!(value!);
@@ -152,12 +155,12 @@ class _DialPadState extends State<DialPad> {
           Padding(
             padding: EdgeInsets.all(20),
             child: TextFormField(
-              readOnly: true,
+              // readOnly: true,
               style: TextStyle(
                   color: widget.dialOutputTextColor ?? Colors.black,
                   fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
               textAlign: TextAlign.center,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: widget.inputDecoration ?? InputDecoration(border: InputBorder.none),
               controller: textEditingController,
             ),
           ),
@@ -371,7 +374,7 @@ class _DialButtonState extends State<DialButton>
                           )
                         : Padding(
                             padding: EdgeInsets.only(
-                                top: widget.title == "*" ? 10 : 0),
+                                top: widget.title == "*" ? 0 : 0),
                             child: Text(
                               widget.title!,
                               style: TextStyle(
