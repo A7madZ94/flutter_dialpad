@@ -37,6 +37,7 @@ class DialPad extends StatefulWidget {
   final Color? searchContainerColor;
   final double? searchIconSize;
   final List<String> searchResults;
+  final BoxConstraints constraints;
 
   DialPad({
     this.makeCall,
@@ -72,6 +73,7 @@ class DialPad extends StatefulWidget {
     this.heightSearchBar = 40,
     this.searchIconSize,      
     this.searchResults = const [],
+    this.constraints = const BoxConstraints(maxWidth: 300 ,maxHeight: 300)
   });
 
   @override
@@ -189,6 +191,7 @@ class _DialPadState extends State<DialPad> {
                               ),
                               child: Center(
                                 child:  SearchAnchor(
+                viewConstraints: widget.constraints ,
                 searchController: controller,
                 builder: (BuildContext context, SearchController controller) {
                   return IconButton(
