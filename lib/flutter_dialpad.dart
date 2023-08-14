@@ -80,6 +80,7 @@ class DialPad extends StatefulWidget {
 
 class _DialPadState extends State<DialPad> {
   MaskedTextController? textEditingController;
+  final SearchController controller = SearchController();
   var _value = "";
   var mainTitle = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "＃"];
   var subTitle = [
@@ -187,11 +188,41 @@ class _DialPadState extends State<DialPad> {
                           ),
                               ),
                               child: Center(
-                                child: IconButton(
-                                                  onPressed: (){
-                                                  showSearch(context: context, delegate: MySearchDelegate(widget.searchResults));
-                                },
-                                 icon: Icon(Icons.search, ),),
+                                child:  SearchAnchor(
+                searchController: controller,
+                builder: (BuildContext context, SearchController controller) {
+                  return IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      controller.openView();
+                    },
+                  );
+                },
+                suggestionsBuilder:
+                    (BuildContext context, SearchController controller) {
+                  return List<ListTile>.generate(5, (int index) {
+                    final String item = 'item $index';
+                    return ListTile(
+                      title: Text(item),
+                      onTap: () {
+                        setState(() {
+                          controller.closeView(item);
+                          
+                        });
+                      },
+                    );
+                  });
+                }),
+                                
+                                
+                                
+                                
+                                
+                                //  IconButton(
+                                //                   onPressed: (){
+                                //                   showSearch(context: context, delegate: MySearchDelegate(widget.searchResults));
+                                // },
+                                //  icon: Icon(Icons.search, ),),
                               )),
                   ),
                 ),
@@ -456,48 +487,52 @@ class _DialButtonState extends State<DialButton>
 }
 
 
-class MySearchDelegate extends SearchDelegate{
-  MySearchDelegate(this.searchResults);
-  List<String> searchResults ;
-   @override
-  List<Widget>? buildActions(BuildContext context)  =>[ IconButton(onPressed: (){
-    if (query.isEmpty) {
-       close(context, null);
-    }else{
-    query = '';
-    }
-  }, icon: Icon(Icons.clear))];
+// class MySearchDelegate extends SearchDelegate{
+//   MySearchDelegate(this.searchResults);
+//   List<String> searchResults ;
+//    @override
+//   List<Widget>? buildActions(BuildContext context)  =>[ IconButton(onPressed: (){
+//     if (query.isEmpty) {
+//        close(context, null);
+//     }else{
+//     query = '';
+//     }
+//   }, icon: Icon(Icons.clear))];
 
-  @override
-  Widget? buildLeading(BuildContext context)  => IconButton(onPressed: () => close(context, null), icon: Icon(Icons.arrow_back));
+//   @override
+//   Widget? buildLeading(BuildContext context)  => IconButton(onPressed: () => close(context, null), icon: Icon(Icons.arrow_back));
 
-  @override
-  Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
-  }
+//   @override
+//   Widget buildResults(BuildContext context) {
+//     // TODO: implement buildResults
+//     throw UnimplementedError();
+//   }
 
-  @override
-  Widget buildSuggestions(BuildContext context) {
-   List<String> suggestions = searchResults.where((searchResult){
-    final result = searchResult.toLowerCase();
-    final input = query.toLowerCase();
-    return result.contains(input);
-   }).toList();
+//   @override
+//   Widget buildSuggestions(BuildContext context) {
+//     List<String> suggestions= [];
+//     if(query.isNotEmpty){
+//        suggestions = searchResults.where((searchResult){
+//     final result = searchResult.toLowerCase();
+//     final input = query.toLowerCase();
+//     return result.contains(input);
+//    }).toList();
+//     }else{
+//       suggestions = searchResults;
+//     }
+//    return ListView.builder(itemCount: suggestions.length,
+//    itemBuilder: (context, index){
+//     final suggestion = suggestions[index];
 
-   return ListView.builder(itemCount: suggestions.length,
-   itemBuilder: (context, index){
-    final suggestion = suggestions[index];
+//     return ListTile(
+//       title: Text(suggestion),
+//       onTap: (){
+//         query = suggestion;
+//         // showResults(context);
+//       },
+//     );
+//    },
+//    );
+//   }
 
-    return ListTile(
-      title: Text(suggestion),
-      onTap: (){
-        query = suggestion;
-        // showResults(context);
-      },
-    );
-   },
-   );
-  }
-
-}
+// }
