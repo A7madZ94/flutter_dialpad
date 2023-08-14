@@ -35,6 +35,8 @@ class DialPad extends StatefulWidget {
   final double? heightSearchBar;
   final InputDecoration? inputDecoration;
   final Color? searchContainerColor;
+  final double? searchIconSize;
+  final List<String> searchResults;
 
   DialPad({
     this.makeCall,
@@ -66,8 +68,10 @@ class DialPad extends StatefulWidget {
                     ),
                   ),
                 ),
-    this.searchContainerColor = Colors.white54,            
-    this.heightSearchBar = 40,            
+    this.searchContainerColor = Colors.white,            
+    this.heightSearchBar = 40,
+    this.searchIconSize,      
+    this.searchResults = const [],
   });
 
   @override
@@ -165,17 +169,16 @@ class _DialPadState extends State<DialPad> {
     return Center(
       child: Column(
         children: <Widget>[
-          SizedBox(height: 20,),
+          SizedBox(height: 12),
             SizedBox(
-              height: widget.heightSearchBar ?? 50,
-
+              height: widget.heightSearchBar ?? 41,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 15),
+                    padding: EdgeInsets.only(left: 10),
                     child: Container(
                               decoration: BoxDecoration(
                     color:widget.searchContainerColor,
@@ -183,17 +186,19 @@ class _DialPadState extends State<DialPad> {
                             Radius.circular(10),
                           ),
                               ),
-                              child: IconButton(
-                    onPressed: (){
-                    showSearch(context: context, delegate: MySearchDelegate());
-                              },
-                               icon: Icon(Icons.search),)),
+                              child: Center(
+                                child: IconButton(
+                                                  onPressed: (){
+                                                  showSearch(context: context, delegate: MySearchDelegate(widget.searchResults));
+                                },
+                                 icon: Icon(Icons.search, ),),
+                              )),
                   ),
                 ),
                 Expanded(
                   flex: 5,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: TextFormField(
                       // readOnly: true,
                       onChanged: (val) {
@@ -214,6 +219,7 @@ class _DialPadState extends State<DialPad> {
               ],
             ),
           ),
+          SizedBox(height: 12,),
           ..._getDialerButtons(),
           SizedBox(
             height: 15,
@@ -451,17 +457,19 @@ class _DialButtonState extends State<DialButton>
 
 
 class MySearchDelegate extends SearchDelegate{
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    // TODO: implement buildActions
-    throw UnimplementedError();
-  }
+  MySearchDelegate(this.searchResults);
+  List<String> searchResults ;
+   @override
+  List<Widget>? buildActions(BuildContext context)  =>[ IconButton(onPressed: (){
+    if (query.isEmpty) {
+       close(context, null);
+    }else{
+    query = '';
+    }
+  }, icon: Icon(Icons.clear))];
 
   @override
-  Widget? buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
-    throw UnimplementedError();
-  }
+  Widget? buildLeading(BuildContext context)  => IconButton(onPressed: () => close(context, null), icon: Icon(Icons.arrow_back));
 
   @override
   Widget buildResults(BuildContext context) {
@@ -471,8 +479,25 @@ class MySearchDelegate extends SearchDelegate{
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    throw UnimplementedError();
+   List<String> suggestions = searchResults.where((searchResult){
+    final result = searchResult.toLowerCase();
+    final input = query.toLowerCase();
+    return result.contains(input);
+   }).toList();
+
+   return ListView.builder(itemCount: suggestions.length,
+   itemBuilder: (context, index){
+    final suggestion = suggestions[index];
+
+    return ListTile(
+      title: Text(suggestion),
+      onTap: (){
+        query = suggestion;
+        // showResults(context);
+      },
+    );
+   },
+   );
   }
 
 }
