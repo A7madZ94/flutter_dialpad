@@ -67,7 +67,7 @@ class DialPad extends StatefulWidget {
                   ),
                 ),
     this.searchContainerColor = Colors.white54,            
-    this.heightSearchBar = 45,            
+    this.heightSearchBar = 40,            
   });
 
   @override
@@ -165,6 +165,7 @@ class _DialPadState extends State<DialPad> {
     return Center(
       child: Column(
         children: <Widget>[
+          SizedBox(height: 20,),
             SizedBox(
               height: widget.heightSearchBar ?? 50,
 
@@ -192,7 +193,7 @@ class _DialPadState extends State<DialPad> {
                 Expanded(
                   flex: 5,
                   child: Padding(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
                     child: TextFormField(
                       // readOnly: true,
                       onChanged: (val) {
