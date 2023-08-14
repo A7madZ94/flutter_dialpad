@@ -33,6 +33,7 @@ class DialPad extends StatefulWidget {
   final double? deleteButtonSize;
   final double? plusFontSize;
   final InputDecoration? inputDecoration;
+  final Color? searchContainerColor;
 
   DialPad({
     this.makeCall,
@@ -64,6 +65,7 @@ class DialPad extends StatefulWidget {
                     ),
                   ),
                 ),
+    this.searchContainerColor = Colors.white54,            
   });
 
   @override
@@ -161,7 +163,17 @@ class _DialPadState extends State<DialPad> {
     return Center(
       child: Column(
         children: <Widget>[
-          
+          Container(
+            decoration: BoxDecoration(
+              color:widget.searchContainerColor,
+             borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+            ),
+            child: IconButton(onPressed: (){
+              showSearch(context: context, delegate: MySearchDelegate());
+            },
+             icon: Icon(Icons.search),)),
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(20),
@@ -415,4 +427,32 @@ class _DialButtonState extends State<DialButton>
       ),
     );
   }
+}
+
+
+class MySearchDelegate extends SearchDelegate{
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    throw UnimplementedError();
+  }
+
 }

@@ -67,7 +67,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: b52795af26c62e93bf158249bce2a367511e8dcf
+      resolved-ref: "1a6625479d51db4fa7646172d879b169813ed21a"
       url: "https://github.com/A7madZ94/flutter_dialpad.git"
     source: git
     version: "1.0.5"
