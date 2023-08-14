@@ -37,7 +37,6 @@ class _MyAppState extends State<MyApp> {
           deleteButtonSize: 30,
           dialOutputTextFontSize: 25,
           searchContainerColor: Colors.white,
-          
           inputDecoration: const InputDecoration(
             filled: true,
             fillColor: Colors.white,

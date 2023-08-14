@@ -73,7 +73,7 @@ class DialPad extends StatefulWidget {
     this.heightSearchBar = 40,
     this.searchIconSize,      
     this.searchResults = const [],
-    this.constraints = const BoxConstraints(maxWidth: 300 ,maxHeight: 300)
+    this.constraints = const BoxConstraints(minWidth: 310, maxHeight: 380)
   });
 
   @override
@@ -241,7 +241,7 @@ class _DialPadState extends State<DialPad> {
                         });
                       },
                       style: TextStyle(
-                          color: widget.dialOutputTextColor ?? Colors.white,
+                          color: widget.dialOutputTextColor ?? Colors.black,
                           fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
                       textAlign: TextAlign.center,
                       decoration: widget.inputDecoration ??
