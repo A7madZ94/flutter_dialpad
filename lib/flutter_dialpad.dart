@@ -32,6 +32,7 @@ class DialPad extends StatefulWidget {
   final double? dialOutputTextFontSize;
   final double? deleteButtonSize;
   final double? plusFontSize;
+  final double? heightSearchBar;
   final InputDecoration? inputDecoration;
   final Color? searchContainerColor;
 
@@ -66,6 +67,7 @@ class DialPad extends StatefulWidget {
                   ),
                 ),
     this.searchContainerColor = Colors.white54,            
+    this.heightSearchBar = 45,            
   });
 
   @override
@@ -163,45 +165,53 @@ class _DialPadState extends State<DialPad> {
     return Center(
       child: Column(
         children: <Widget>[
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                          decoration: BoxDecoration(
-                color:widget.searchContainerColor,
-                           borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
+            SizedBox(
+              height: widget.heightSearchBar ?? 50,
+
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 15),
+                    child: Container(
+                              decoration: BoxDecoration(
+                    color:widget.searchContainerColor,
+                               borderRadius: BorderRadius.all(
+                            Radius.circular(10),
                           ),
-                          child: IconButton(
-                onPressed: (){
-                showSearch(context: context, delegate: MySearchDelegate());
-                          },
-                           icon: Icon(Icons.search),)),
-              ),
-              Expanded(
-                flex: 5,
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: TextFormField(
-                    // readOnly: true,
-                    onChanged: (val) {
-                      setState(() {
-                        _value = val;
-                      });
-                    },
-                    style: TextStyle(
-                        color: widget.dialOutputTextColor ?? Colors.white,
-                        fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
-                    textAlign: TextAlign.center,
-                    decoration: widget.inputDecoration ??
-                        InputDecoration(border: InputBorder.none),
-                    controller: textEditingController,
+                              ),
+                              child: IconButton(
+                    onPressed: (){
+                    showSearch(context: context, delegate: MySearchDelegate());
+                              },
+                               icon: Icon(Icons.search),)),
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  flex: 5,
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: TextFormField(
+                      // readOnly: true,
+                      onChanged: (val) {
+                        setState(() {
+                          _value = val;
+                        });
+                      },
+                      style: TextStyle(
+                          color: widget.dialOutputTextColor ?? Colors.white,
+                          fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
+                      textAlign: TextAlign.center,
+                      decoration: widget.inputDecoration ??
+                          InputDecoration(border: InputBorder.none),
+                      controller: textEditingController,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           ..._getDialerButtons(),
           SizedBox(
