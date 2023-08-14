@@ -163,36 +163,41 @@ class _DialPadState extends State<DialPad> {
     return Center(
       child: Column(
         children: <Widget>[
-          Container(
+          Row(
+            children: [
+              Container(
             decoration: BoxDecoration(
               color:widget.searchContainerColor,
              borderRadius: BorderRadius.all(
                       Radius.circular(10),
                     ),
             ),
-            child: IconButton(onPressed: (){
+            child: IconButton(
+              onPressed: (){
               showSearch(context: context, delegate: MySearchDelegate());
             },
              icon: Icon(Icons.search),)),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: TextFormField(
-                // readOnly: true,
-                onChanged: (val) {
-                  setState(() {
-                    _value = val;
-                  });
-                },
-                style: TextStyle(
-                    color: widget.dialOutputTextColor ?? Colors.white,
-                    fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
-                textAlign: TextAlign.center,
-                decoration: widget.inputDecoration ??
-                    InputDecoration(border: InputBorder.none),
-                controller: textEditingController,
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: TextFormField(
+                    // readOnly: true,
+                    onChanged: (val) {
+                      setState(() {
+                        _value = val;
+                      });
+                    },
+                    style: TextStyle(
+                        color: widget.dialOutputTextColor ?? Colors.white,
+                        fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
+                    textAlign: TextAlign.center,
+                    decoration: widget.inputDecoration ??
+                        InputDecoration(border: InputBorder.none),
+                    controller: textEditingController,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
           ..._getDialerButtons(),
           SizedBox(
