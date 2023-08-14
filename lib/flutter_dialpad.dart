@@ -41,23 +41,29 @@ class DialPad extends StatefulWidget {
     this.hideSubtitle = false,
     this.outputMask,
     this.buttonColor,
-    this.buttonTextColor,
+    this.buttonTextColor = Colors.white,
     this.dialButtonColor,
     this.dialButtonIconColor,
     this.dialButtonIcon,
     this.dialOutputTextColor,
     this.backspaceButtonIconColor,
     this.enableDtmf,
-    this.buttonClipOvalRadius,
-    this.titleFontSize,
-    this.subTitleFontSize,
-    this.starIconSize,
-    this.callIconSize,
-    this.hashIconSize,
-    this.dialOutputTextFontSize = 13,
-    this.deleteButtonSize = 15,
-    this.plusFontSize = 2,
-    this.inputDecoration = const InputDecoration(border: InputBorder.none),
+    this.buttonClipOvalRadius = 48,
+    this.titleFontSize = 15,
+    this.subTitleFontSize = 8,
+    this.starIconSize = 35,
+    this.callIconSize = 22,
+    this.hashIconSize = 20,
+    this.dialOutputTextFontSize = 20,
+    this.deleteButtonSize = 30,
+    this.plusFontSize = 4,
+    this.inputDecoration = const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                ),
   });
 
   @override
@@ -155,22 +161,25 @@ class _DialPadState extends State<DialPad> {
     return Center(
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(20),
-            child: TextFormField(
-              // readOnly: true,
-              onChanged: (val) {
-                setState(() {
-                  _value = val;
-                });
-              },
-              style: TextStyle(
-                  color: widget.dialOutputTextColor ?? Colors.black,
-                  fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
-              textAlign: TextAlign.center,
-              decoration: widget.inputDecoration ??
-                  InputDecoration(border: InputBorder.none),
-              controller: textEditingController,
+          
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: TextFormField(
+                // readOnly: true,
+                onChanged: (val) {
+                  setState(() {
+                    _value = val;
+                  });
+                },
+                style: TextStyle(
+                    color: widget.dialOutputTextColor ?? Colors.white,
+                    fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
+                textAlign: TextAlign.center,
+                decoration: widget.inputDecoration ??
+                    InputDecoration(border: InputBorder.none),
+                controller: textEditingController,
+              ),
             ),
           ),
           ..._getDialerButtons(),
@@ -217,9 +226,9 @@ class _DialPadState extends State<DialPad> {
                         Icons.backspace,
                         size: widget.deleteButtonSize ?? sizeFactor / 2,
                         color: _value.length > 0
-                            ? (widget.backspaceButtonIconColor != null
-                                ? widget.backspaceButtonIconColor
-                                : Colors.white24)
+                            ? 
+                                 widget.backspaceButtonIconColor ??  Theme.of(context).colorScheme.error
+                               
                             : Colors.white24,
                       ),
                       onTap: _value.length > 0
@@ -367,7 +376,7 @@ class _DialButtonState extends State<DialButton>
                                         widget.titleFontSize ?? sizeFactor / 2,
                                     color: widget.textColor != null
                                         ? widget.textColor
-                                        : Colors.black),
+                                        : Colors.white),
                               ),
                               if (!widget.hideSubtitle)
                                 Text(widget.subtitle!,
@@ -378,7 +387,7 @@ class _DialButtonState extends State<DialButton>
                                             : widget.subTitleFontSize,
                                         color: widget.textColor != null
                                             ? widget.textColor
-                                            : Colors.black))
+                                            : Colors.white))
                             ],
                           )
                         : Padding(
@@ -394,7 +403,7 @@ class _DialButtonState extends State<DialButton>
                                       : widget.hashIconSize ?? sizeFactor / 2,
                                   color: widget.textColor != null
                                       ? widget.textColor
-                                      : Colors.black),
+                                      : Colors.white),
                             ))
                     : Icon(widget.icon,
                         size: widget.callIconSize ?? sizeFactor / 2,
