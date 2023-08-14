@@ -165,19 +165,23 @@ class _DialPadState extends State<DialPad> {
         children: <Widget>[
           Row(
             children: [
-              Container(
-            decoration: BoxDecoration(
-              color:widget.searchContainerColor,
-             borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-            ),
-            child: IconButton(
-              onPressed: (){
-              showSearch(context: context, delegate: MySearchDelegate());
-            },
-             icon: Icon(Icons.search),)),
               Expanded(
+                flex: 1,
+                child: Container(
+                          decoration: BoxDecoration(
+                color:widget.searchContainerColor,
+                           borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                          ),
+                          child: IconButton(
+                onPressed: (){
+                showSearch(context: context, delegate: MySearchDelegate());
+                          },
+                           icon: Icon(Icons.search),)),
+              ),
+              Expanded(
+                flex: 5,
                 child: Padding(
                   padding: EdgeInsets.all(20),
                   child: TextFormField(
