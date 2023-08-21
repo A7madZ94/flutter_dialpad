@@ -83,7 +83,10 @@ class DialPad extends StatefulWidget {
 
 class _DialPadState extends State<DialPad> {
   MaskedTextController? textEditingController;
-  final SearchController searchController = SearchController();
+  TextEditingController? pinTextEditingController;
+  SearchController? searchController;
+  late FocusNode myNumberFocusNode;
+  late FocusNode myPinFocusNode;
   var _value = "";
   var _symbol = "";
   var mainTitle = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "＃"];
@@ -106,12 +109,20 @@ class _DialPadState extends State<DialPad> {
   void initState() {
     textEditingController = MaskedTextController(
         mask: widget.outputMask != null ? widget.outputMask : '(000) 000-0000');
+    searchController = SearchController();
+    pinTextEditingController = TextEditingController();
+    myNumberFocusNode = FocusNode();
+    myPinFocusNode = FocusNode();
     super.initState();
   }
 
   @override
   void dispose() {
-    searchController.dispose();
+    textEditingController!.dispose();
+    searchController!.dispose();
+    pinTextEditingController!.dispose();
+    myNumberFocusNode.dispose();
+    myPinFocusNode.dispose();
     super.dispose();
   }
 
@@ -126,16 +137,23 @@ class _DialPadState extends State<DialPad> {
   }
 
   _setText(String? value) async {
-    if ((widget.enableDtmf == null || widget.enableDtmf!) && value != null)
-      FlutterDtmf.playTone(
-          digits: value.trim(), samplingRate: 8000, durationMs: 160);
+    if (myNumberFocusNode.hasFocus) {
+      if ((widget.enableDtmf == null || widget.enableDtmf!) && value != null)
+        FlutterDtmf.playTone(
+            digits: value.trim(), samplingRate: 8000, durationMs: 160);
 
-    if (widget.keyPressed != null) widget.keyPressed!(value!);
+      if (widget.keyPressed != null) widget.keyPressed!(value!);
 
-    setState(() {
-      _value += value!;
-      textEditingController!.text = _value;
-    });
+      setState(() {
+        _value += value!;
+        textEditingController!.text = _value;
+      });
+    } else {
+      setState(() {
+        _symbol += value!;
+        pinTextEditingController!.text = _symbol;
+      });
+    }
   }
 
   List<Widget> _getDialerButtons() {
@@ -214,7 +232,10 @@ class _DialPadState extends State<DialPad> {
                               builder: (BuildContext context,
                                   SearchController controller) {
                                 return IconButton(
-                                  icon: Icon(Icons.search, size: widget.searchIconSize,),
+                                  icon: Icon(
+                                    Icons.search,
+                                    size: widget.searchIconSize,
+                                  ),
                                   onPressed: () {
                                     controller.openView();
                                   },
@@ -298,6 +319,7 @@ class _DialPadState extends State<DialPad> {
                       decoration: widget.inputDecoration ??
                           InputDecoration(border: InputBorder.none),
                       controller: textEditingController,
+                      focusNode: myNumberFocusNode,
                     ),
                   ),
                 ),
@@ -311,39 +333,49 @@ class _DialPadState extends State<DialPad> {
             height: widget.heightSearchBar ?? 41,
             child: Row(children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_value.isNotEmpty) {
-                      widget.makeCall!(_symbol);
-                    }
-                  },
-                  child: Text(
-                    'Ext/Pin:',
-                  ),
-                  style: ElevatedButton.styleFrom().copyWith(
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_symbol.isNotEmpty) {
+                        widget.makeCall!(_symbol);
+                      }
+                    },
+                    child: Text(
+                      'Ext/Pin:',
+                    ),
+                    style: ElevatedButton.styleFrom().copyWith(
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
+              SizedBox(
+                width: 3,
+              ),
               Expanded(
-                child: TextFormField(
-                  onChanged: (val) {
-                    setState(() {
-                      _symbol = val;
-                    });
-                  },
-                  style: TextStyle(
-                      color: widget.dialOutputTextColor ?? Colors.black,
-                      fontSize:
-                          widget.dialOutputTextFontSize ?? sizeFactor / 2),
-                  textAlign: TextAlign.center,
-                  decoration: widget.inputDecoration ??
-                      InputDecoration(border: InputBorder.none),
-                  controller: textEditingController,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFormField(
+                    onChanged: (val) {
+                      setState(() {
+                        _symbol = val;
+                      });
+                    },
+                    style: TextStyle(
+                        color: widget.dialOutputTextColor ?? Colors.black,
+                        fontSize:
+                            widget.dialOutputTextFontSize ?? sizeFactor / 2),
+                    textAlign: TextAlign.center,
+                    decoration: widget.inputDecoration ??
+                        InputDecoration(border: InputBorder.none),
+                    controller: pinTextEditingController,
+                    focusNode: myPinFocusNode,
+                  ),
                 ),
               )
             ]),
@@ -353,7 +385,7 @@ class _DialPadState extends State<DialPad> {
           ),
           ..._getDialerButtons(),
           SizedBox(
-            height: 15,
+            height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -374,7 +406,7 @@ class _DialPadState extends State<DialPad> {
                               : Colors.green,
                           hideSubtitle: widget.hideSubtitle!,
                           onTap: (value) {
-                            if (_value.isNotEmpty) {
+                            if (_value.isNotEmpty || _symbol.isNotEmpty) {
                               widget.makeCall!(_value);
                             }
                           },
