@@ -148,7 +148,8 @@ class _DialPadState extends State<DialPad> {
         _value += value!;
         textEditingController!.text = _value;
       });
-    } else {
+    }
+     if (myPinFocusNode.hasFocus)  {
       setState(() {
         _symbol += value!;
         pinTextEditingController!.text = _symbol;
@@ -354,12 +355,9 @@ class _DialPadState extends State<DialPad> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 3,
-              ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.only(left: 8, right: 10),
                   child: TextFormField(
                     onChanged: (val) {
                       setState(() {
