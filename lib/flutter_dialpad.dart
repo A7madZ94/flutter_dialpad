@@ -5,6 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:flutter_dtmf/flutter_dtmf.dart';
 
+enum WhichTextField {
+  first,
+  second,
+}
+
 class DialPad extends StatefulWidget {
   final ValueSetter<String>? makeCall;
   final ValueSetter<String>? keyPressed;
@@ -87,6 +92,8 @@ class _DialPadState extends State<DialPad> {
   SearchController? searchController;
   late FocusNode myNumberFocusNode;
   late FocusNode myPinFocusNode;
+
+  WhichTextField firstOrSecond = WhichTextField.first;
   var _value = "";
   var _symbol = "";
   var mainTitle = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "＃"];
@@ -105,14 +112,26 @@ class _DialPadState extends State<DialPad> {
     null
   ];
 
+  void checkFocus() {
+    if (myNumberFocusNode.hasFocus) {
+      firstOrSecond = WhichTextField.first;
+    } else if (myPinFocusNode.hasFocus) {
+      firstOrSecond = WhichTextField.second;
+    }
+  }
+
   @override
   void initState() {
     textEditingController = MaskedTextController(
         mask: widget.outputMask != null ? widget.outputMask : '(000) 000-0000');
     searchController = SearchController();
     pinTextEditingController = TextEditingController();
-    myNumberFocusNode = FocusNode();
+    myNumberFocusNode = FocusNode()
+      ..addListener(() {
+        checkFocus();
+      });
     myPinFocusNode = FocusNode();
+
     super.initState();
   }
 
@@ -122,7 +141,6 @@ class _DialPadState extends State<DialPad> {
     searchController!.dispose();
     pinTextEditingController!.dispose();
     myNumberFocusNode.dispose();
-    myPinFocusNode.dispose();
     super.dispose();
   }
 
@@ -137,7 +155,7 @@ class _DialPadState extends State<DialPad> {
   }
 
   _setText(String? value) async {
-    if (myNumberFocusNode.hasFocus) {
+    if (firstOrSecond == WhichTextField.first) {
       if ((widget.enableDtmf == null || widget.enableDtmf!) && value != null)
         FlutterDtmf.playTone(
             digits: value.trim(), samplingRate: 8000, durationMs: 160);
@@ -148,8 +166,7 @@ class _DialPadState extends State<DialPad> {
         _value += value!;
         textEditingController!.text = _value;
       });
-    }
-     if (myPinFocusNode.hasFocus)  {
+    } else {
       setState(() {
         _symbol += value!;
         pinTextEditingController!.text = _symbol;
@@ -359,10 +376,13 @@ class _DialPadState extends State<DialPad> {
                 child: Padding(
                   padding: EdgeInsets.only(left: 8, right: 10),
                   child: TextFormField(
+                    keyboardType: TextInputType.number,
                     onChanged: (val) {
-                      setState(() {
-                        _symbol = val;
-                      });
+                      if (mainTitle.contains(val)) {
+                        setState(() {
+                          _symbol = val;
+                        });
+                      }
                     },
                     style: TextStyle(
                         color: widget.dialOutputTextColor ?? Colors.black,
