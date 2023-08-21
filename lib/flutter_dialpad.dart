@@ -97,6 +97,7 @@ class _DialPadState extends State<DialPad> {
   var _value = "";
   var _symbol = "";
   var mainTitle = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "＃"];
+  var pinAvi = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "＃", ""];
   var subTitle = [
     "",
     "ABC",
@@ -382,7 +383,7 @@ class _DialPadState extends State<DialPad> {
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     onChanged: (val) {
-                      if (mainTitle.contains(val)) {
+                      if (pinAvi.contains(val)) {
                         setState(() {
                           _symbol = val;
                         });
@@ -450,12 +451,12 @@ class _DialPadState extends State<DialPad> {
                       child: Icon(
                         Icons.backspace,
                         size: widget.deleteButtonSize ?? sizeFactor / 2,
-                        color: _value.length > 0
+                        color: _value.length > 0 || _symbol.length > 0 
                             ? widget.backspaceButtonIconColor ??
                                 Theme.of(context).colorScheme.error
                             : Colors.white24,
                       ),
-                      onTap: _value.length > 0
+                      onTap: firstOrSecond == WhichTextField.first ? ( _value.length > 0
                           ? () {
                               if (_value.length > 0) {
                                 setState(() {
@@ -465,15 +466,32 @@ class _DialPadState extends State<DialPad> {
                                 });
                               }
                             }
-                          : null,
-                      onLongPress: _value.length > 0
+                          : null) :  ( _symbol.length > 0
+                          ? () {
+                              if (_symbol.length > 0) {
+                                setState(() {
+                                  _symbol =
+                                      _symbol.substring(0, _symbol.length - 1);
+                                  pinTextEditingController!.text = _symbol;
+                                });
+                              }
+                            }
+                          : null),
+                      onLongPress: firstOrSecond == WhichTextField.first ?  (_value.length > 0
                           ? () {
                               setState(() {
                                 textEditingController!.clear();
                                 _value = "";
                               });
                             }
-                          : null,
+                          : null) : (_symbol.length > 0
+                          ? () {
+                              setState(() {
+                                pinTextEditingController!.clear();
+                                _symbol = "";
+                              });
+                            }
+                          : null),
                     )),
               ),
             ],
