@@ -130,7 +130,10 @@ class _DialPadState extends State<DialPad> {
       ..addListener(() {
         checkFocus();
       });
-    myPinFocusNode = FocusNode();
+    myPinFocusNode = FocusNode()
+      ..addListener(() {
+        checkFocus();
+      });
 
     super.initState();
   }
@@ -141,6 +144,7 @@ class _DialPadState extends State<DialPad> {
     searchController!.dispose();
     pinTextEditingController!.dispose();
     myNumberFocusNode.dispose();
+    myPinFocusNode.dispose();
     super.dispose();
   }
 
