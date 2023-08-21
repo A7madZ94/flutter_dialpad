@@ -36,45 +36,46 @@ class DialPad extends StatefulWidget {
   final InputDecoration? inputDecoration;
   final Color? searchContainerColor;
   final double? searchIconSize;
-  final List<String> searchResults;
+  // final List<String> searchResults;
   final BoxConstraints constraints;
+  final List<String> searchHistory;
 
-  DialPad({
-    this.makeCall,
-    this.keyPressed,
-    this.hideDialButton,
-    this.hideSubtitle = false,
-    this.outputMask,
-    this.buttonColor,
-    this.buttonTextColor = Colors.white,
-    this.dialButtonColor,
-    this.dialButtonIconColor,
-    this.dialButtonIcon,
-    this.dialOutputTextColor,
-    this.backspaceButtonIconColor,
-    this.enableDtmf,
-    this.buttonClipOvalRadius = 48,
-    this.titleFontSize = 15,
-    this.subTitleFontSize = 8,
-    this.starIconSize = 35,
-    this.callIconSize = 22,
-    this.hashIconSize = 20,
-    this.dialOutputTextFontSize = 20,
-    this.deleteButtonSize = 30,
-    this.plusFontSize = 4,
-    this.inputDecoration = const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                ),
-    this.searchContainerColor = Colors.white,            
-    this.heightSearchBar = 40,
-    this.searchIconSize,      
-    this.searchResults = const [],
-    this.constraints = const BoxConstraints(minWidth: 310, maxHeight: 380)
-  });
+  DialPad(
+      {this.makeCall,
+      this.keyPressed,
+      this.hideDialButton,
+      this.hideSubtitle = false,
+      this.outputMask,
+      this.buttonColor,
+      this.buttonTextColor = Colors.white,
+      this.dialButtonColor,
+      this.dialButtonIconColor,
+      this.dialButtonIcon,
+      this.dialOutputTextColor,
+      this.backspaceButtonIconColor,
+      this.enableDtmf,
+      this.buttonClipOvalRadius = 48,
+      this.titleFontSize = 15,
+      this.subTitleFontSize = 8,
+      this.starIconSize = 35,
+      this.callIconSize = 22,
+      this.hashIconSize = 20,
+      this.dialOutputTextFontSize = 20,
+      this.deleteButtonSize = 30,
+      this.plusFontSize = 4,
+      this.inputDecoration = const InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+      ),
+      this.searchContainerColor = Colors.white,
+      this.heightSearchBar = 40,
+      this.searchIconSize,
+      // this.searchResults = const [],
+      this.constraints = const BoxConstraints(minWidth: 310, maxHeight: 380),
+      this.searchHistory = const []});
 
   @override
   _DialPadState createState() => _DialPadState();
@@ -82,8 +83,9 @@ class DialPad extends StatefulWidget {
 
 class _DialPadState extends State<DialPad> {
   MaskedTextController? textEditingController;
-  final SearchController controller = SearchController();
+  final SearchController searchController = SearchController();
   var _value = "";
+  var _symbol = "";
   var mainTitle = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "＃"];
   var subTitle = [
     "",
@@ -107,6 +109,22 @@ class _DialPadState extends State<DialPad> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  Future<List<String>> search(String value) {
+    var suggestions = widget.searchHistory.where((searchResult) {
+      final result = searchResult.toLowerCase();
+      final input = value.toLowerCase();
+      return result.contains(input);
+    }).toList();
+
+    return Future.value(suggestions);
+  }
+
   _setText(String? value) async {
     if ((widget.enableDtmf == null || widget.enableDtmf!) && value != null)
       FlutterDtmf.playTone(
@@ -117,7 +135,6 @@ class _DialPadState extends State<DialPad> {
     setState(() {
       _value += value!;
       textEditingController!.text = _value;
-
     });
   }
 
@@ -172,9 +189,9 @@ class _DialPadState extends State<DialPad> {
     return Center(
       child: Column(
         children: <Widget>[
-          SizedBox(height: 12),
-            SizedBox(
-              height: widget.heightSearchBar ?? 41,
+          SizedBox(height: 6),
+          SizedBox(
+            height: widget.heightSearchBar ?? 41,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -183,50 +200,83 @@ class _DialPadState extends State<DialPad> {
                   child: Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Container(
-                              decoration: BoxDecoration(
-                    color:widget.searchContainerColor,
-                               borderRadius: BorderRadius.all(
+                        decoration: BoxDecoration(
+                          color: widget.searchContainerColor,
+                          borderRadius: BorderRadius.all(
                             Radius.circular(10),
                           ),
-                              ),
-                              child: Center(
-                                child:  SearchAnchor(
-                viewConstraints: widget.constraints ,
-                searchController: controller,
-                builder: (BuildContext context, SearchController controller) {
-                  return IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      controller.openView();
-                    },
-                  );
-                },
-                suggestionsBuilder:
-                    (BuildContext context, SearchController controller) {
-                  return List<ListTile>.generate(5, (int index) {
-                    final String item = 'item $index';
-                    return ListTile(
-                      title: Text(item),
-                      onTap: () {
-                        setState(() {
-                          controller.closeView(item);
-                          
-                        });
-                      },
-                    );
-                  });
-                }),
-                                
-                                
-                                
-                                
-                                
-                                //  IconButton(
-                                //                   onPressed: (){
-                                //                   showSearch(context: context, delegate: MySearchDelegate(widget.searchResults));
-                                // },
-                                //  icon: Icon(Icons.search, ),),
-                              )),
+                        ),
+                        child: Center(
+                          child: SearchAnchor(
+                              viewConstraints: widget.constraints,
+                              searchController: searchController,
+                              viewHintText: 'search...',
+                              builder: (BuildContext context,
+                                  SearchController controller) {
+                                return IconButton(
+                                  icon: Icon(Icons.search, size: widget.searchIconSize,),
+                                  onPressed: () {
+                                    controller.openView();
+                                  },
+                                );
+                              },
+                              suggestionsBuilder: (BuildContext context,
+                                  SearchController controller) {
+                                final searchFuture = search(controller.text);
+                                return [
+                                  FutureBuilder<List<String>>(
+                                    future: searchFuture,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        List<String>? list = snapshot.data;
+                                        if (list != null) {
+                                          return ListView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: list.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                title: Text(list[index]),
+                                                onTap: () {
+                                                  setState(() {
+                                                    controller
+                                                        .closeView(list[index]);
+                                                  });
+                                                },
+                                              );
+                                            },
+                                          );
+                                        }
+                                      }
+                                      return const LinearProgressIndicator();
+                                    },
+                                  )
+                                ];
+
+                                // return List<ListTile>.generate(
+                                //     widget.searchHistory.length, (int index) {
+                                //   final item = widget.searchHistory[index];
+                                //   return ListTile(
+                                //     title: Text(item),
+                                //     onTap: () {
+                                //       setState(() {
+                                //         widget.makeCall!(item);
+                                //         controller.closeView(item);
+                                //       });
+                                //     },
+                                //   );
+                                // });
+                              }),
+
+                          //  IconButton(
+                          //                   onPressed: (){
+                          //                   showSearch(context: context, delegate: MySearchDelegate(widget.searchResults));
+                          // },
+                          //  icon: Icon(Icons.search, ),),
+                        )),
                   ),
                 ),
                 Expanded(
@@ -242,7 +292,8 @@ class _DialPadState extends State<DialPad> {
                       },
                       style: TextStyle(
                           color: widget.dialOutputTextColor ?? Colors.black,
-                          fontSize: widget.dialOutputTextFontSize ?? sizeFactor / 2),
+                          fontSize:
+                              widget.dialOutputTextFontSize ?? sizeFactor / 2),
                       textAlign: TextAlign.center,
                       decoration: widget.inputDecoration ??
                           InputDecoration(border: InputBorder.none),
@@ -253,7 +304,53 @@ class _DialPadState extends State<DialPad> {
               ],
             ),
           ),
-          SizedBox(height: 12,),
+          SizedBox(
+            height: 3,
+          ),
+          SizedBox(
+            height: widget.heightSearchBar ?? 41,
+            child: Row(children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_value.isNotEmpty) {
+                      widget.makeCall!(_symbol);
+                    }
+                  },
+                  child: Text(
+                    'Ext/Pin:',
+                  ),
+                  style: ElevatedButton.styleFrom().copyWith(
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TextFormField(
+                  onChanged: (val) {
+                    setState(() {
+                      _symbol = val;
+                    });
+                  },
+                  style: TextStyle(
+                      color: widget.dialOutputTextColor ?? Colors.black,
+                      fontSize:
+                          widget.dialOutputTextFontSize ?? sizeFactor / 2),
+                  textAlign: TextAlign.center,
+                  decoration: widget.inputDecoration ??
+                      InputDecoration(border: InputBorder.none),
+                  controller: textEditingController,
+                ),
+              )
+            ]),
+          ),
+          SizedBox(
+            height: 6,
+          ),
           ..._getDialerButtons(),
           SizedBox(
             height: 15,
@@ -277,7 +374,9 @@ class _DialPadState extends State<DialPad> {
                               : Colors.green,
                           hideSubtitle: widget.hideSubtitle!,
                           onTap: (value) {
-                            widget.makeCall!(_value);
+                            if (_value.isNotEmpty) {
+                              widget.makeCall!(_value);
+                            }
                           },
                           buttonClipOvalRadius: widget.buttonClipOvalRadius,
                           titleFontSize: widget.titleFontSize,
@@ -298,9 +397,8 @@ class _DialPadState extends State<DialPad> {
                         Icons.backspace,
                         size: widget.deleteButtonSize ?? sizeFactor / 2,
                         color: _value.length > 0
-                            ? 
-                                 widget.backspaceButtonIconColor ??  Theme.of(context).colorScheme.error
-                               
+                            ? widget.backspaceButtonIconColor ??
+                                Theme.of(context).colorScheme.error
                             : Colors.white24,
                       ),
                       onTap: _value.length > 0
