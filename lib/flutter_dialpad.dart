@@ -298,28 +298,26 @@ class _DialPadState extends State<DialPad> {
                                           ConnectionState.done) {
                                         List<String>? list = snapshot.data;
                                         if (list != null) {
-                                          return Expanded(
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount: list.length,
-                                              itemBuilder: (BuildContext context,
-                                                  int index) {
-                                                return ListTile(
-                                                  title: Text(
-                                                    list[index],
-                                                    style: widget.searchHistoryItemsStyle,
-                                                  ),
-                                                  onTap: () {
-                                                    setState(() {
-                                                      controller
-                                                          .closeView(list[index]);
-                                                    });
-                                                  },
-                                                );
-                                              },
-                                            ),
+                                          return ListView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: list.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                title: Text(
+                                                  list[index],
+                                                  style: widget.searchHistoryItemsStyle,
+                                                ),
+                                                onTap: () {
+                                                  setState(() {
+                                                    controller
+                                                        .closeView(list[index]);
+                                                  });
+                                                },
+                                              );
+                                            },
                                           );
                                         }
                                       }
@@ -378,7 +376,7 @@ class _DialPadState extends State<DialPad> {
             ),
           ),
           SizedBox(
-            height: 3,
+            height: 4,
           ),
           SizedBox(
             height: widget.heightSearchBar ?? 41,
@@ -433,7 +431,7 @@ class _DialPadState extends State<DialPad> {
             ]),
           ),
           SizedBox(
-            height: 6,
+            height: 7,
           ),
           ..._getDialerButtons(),
           SizedBox(
