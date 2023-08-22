@@ -74,7 +74,7 @@ class DialPad extends StatefulWidget {
       this.searchContainerColor = Colors.white54,
       this.heightSearchBar = 30,
       this.searchIconSize = 16,
-      this.constraints = const BoxConstraints(minWidth: 340, maxHeight: 300),
+      this.constraints = const BoxConstraints(minWidth: 338, maxHeight: 300),
       this.searchHistory =  const [
                     '1',
                     '2',
@@ -101,7 +101,7 @@ class DialPad extends StatefulWidget {
         ),
       ),            
       this.searchHistoryItemsStyle = const TextStyle(color: Colors.white, fontSize: 12),
-      this.extPinButtonFontSize = 15,
+      this.extPinButtonFontSize = 12.5,
       }
       );
 
