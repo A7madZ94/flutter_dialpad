@@ -46,6 +46,7 @@ class DialPad extends StatefulWidget {
   final BoxConstraints constraints;
   final List<String> searchHistory;
   final TextStyle? searchHistoryItemsStyle;
+  final double extPinButtonFontSize;
 
   DialPad(
       {this.makeCall,
@@ -61,29 +62,46 @@ class DialPad extends StatefulWidget {
       this.dialOutputTextColor,
       this.backspaceButtonIconColor,
       this.enableDtmf,
-      this.buttonClipOvalRadius = 48,
-      this.titleFontSize = 15,
-      this.subTitleFontSize = 8,
-      this.starIconSize = 35,
-      this.callIconSize = 22,
-      this.hashIconSize = 20,
-      this.dialOutputTextFontSize = 20,
-      this.deleteButtonSize = 30,
-      this.plusFontSize = 4,
+      this.buttonClipOvalRadius = 36,
+      this.titleFontSize = 11,
+      this.subTitleFontSize = 6,
+      this.starIconSize = 25,
+      this.callIconSize = 16,
+      this.hashIconSize = 14,
+      this.deleteButtonSize = 25,
+      this.dialOutputTextFontSize = 13,
+      this.plusFontSize = 2,
+      this.searchContainerColor = Colors.white54,
+      this.heightSearchBar = 30,
+      this.searchIconSize = 16,
+      this.constraints = const BoxConstraints(minWidth: 340, maxHeight: 300),
+      this.searchHistory =  const [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5',
+                    '6',
+                    '7',
+                    '8',
+                    '9',
+                    '0',
+                    'A',
+                    'B',
+                    'C',
+                    'D',
+                    'E',
+                    'F'
+                  ],
       this.inputDecoration = const InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
         ),
-      ),
-      this.searchContainerColor = Colors.white,
-      this.heightSearchBar = 40,
-      this.searchIconSize,
-      // this.searchResults = const [],
-      this.constraints = const BoxConstraints(minWidth: 310, maxHeight: 380),
-      this.searchHistory = const [],
+      ),            
       this.searchHistoryItemsStyle = const TextStyle(color: Colors.white, fontSize: 12),
+      this.extPinButtonFontSize = 15,
       }
       );
 
@@ -193,7 +211,7 @@ class _DialPadState extends State<DialPad> {
         rows.add(Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: items));
         rows.add(SizedBox(
-          height: 12,
+          height: 10,
         ));
         items = <Widget>[];
       }
@@ -221,7 +239,7 @@ class _DialPadState extends State<DialPad> {
     rows.add(
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: items));
     rows.add(SizedBox(
-      height: 12,
+      height: 10,
     ));
 
     return rows;
@@ -280,26 +298,28 @@ class _DialPadState extends State<DialPad> {
                                           ConnectionState.done) {
                                         List<String>? list = snapshot.data;
                                         if (list != null) {
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            itemCount: list.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return ListTile(
-                                                title: Text(
-                                                  list[index],
-                                                  style: widget.searchHistoryItemsStyle,
-                                                ),
-                                                onTap: () {
-                                                  setState(() {
-                                                    controller
-                                                        .closeView(list[index]);
-                                                  });
-                                                },
-                                              );
-                                            },
+                                          return Expanded(
+                                            child: ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount: list.length,
+                                              itemBuilder: (BuildContext context,
+                                                  int index) {
+                                                return ListTile(
+                                                  title: Text(
+                                                    list[index],
+                                                    style: widget.searchHistoryItemsStyle,
+                                                  ),
+                                                  onTap: () {
+                                                    setState(() {
+                                                      controller
+                                                          .closeView(list[index]);
+                                                    });
+                                                  },
+                                                );
+                                              },
+                                            ),
                                           );
                                         }
                                       }
@@ -374,6 +394,7 @@ class _DialPadState extends State<DialPad> {
                     },
                     child: Text(
                       'Ext/Pin:',
+                      style: TextStyle(fontSize: widget.extPinButtonFontSize)
                     ),
                     style: ElevatedButton.styleFrom().copyWith(
                       shape: MaterialStateProperty.all(
@@ -416,7 +437,7 @@ class _DialPadState extends State<DialPad> {
           ),
           ..._getDialerButtons(),
           SizedBox(
-            height: 10,
+            height: 5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -621,7 +642,7 @@ class _DialButtonState extends State<DialButton>
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               SizedBox(
-                                height: 8,
+                                height: 6,
                               ),
                               Text(
                                 widget.title!,
