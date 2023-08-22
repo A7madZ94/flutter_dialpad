@@ -28,9 +28,9 @@ class DialPad extends StatefulWidget {
   // outputMask is the mask applied to the output text. Defaults to (000) 000-0000
   final String? outputMask;
   final bool? enableDtmf;
-  final ValueKey<String> key;
 
   /// here is where I made some updates on the package
+  final ValueKey<String>? key;
   final double? buttonClipOvalRadius;
   final double? titleFontSize;
   final double? subTitleFontSize;
@@ -51,7 +51,7 @@ class DialPad extends StatefulWidget {
   final double extPinButtonFontSize;
 
   DialPad({
-    required this.key,
+    this.key,
     this.makeCall,
     this.extPinButton,
     this.keyPressed,
@@ -392,7 +392,7 @@ class _DialPadState extends State<DialPad> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_symbol.isNotEmpty) {
-                        widget.extPinButton!(_symbol, widget.key);
+                        widget.extPinButton!(_symbol, widget.key!);
                       }
                     },
                     child: Text('Ext/Pin:',
@@ -461,9 +461,9 @@ class _DialPadState extends State<DialPad> {
                           hideSubtitle: widget.hideSubtitle!,
                           onTap: (value) {
                             if (_value.isNotEmpty) {
-                              widget.makeCall!(_value, widget.key);
+                              widget.makeCall!(_value, widget.key!);
                             } else if (_symbol.isNotEmpty) {
-                              widget.makeCall!(_symbol, widget.key);
+                              widget.makeCall!(_symbol, widget.key!);
                             } else {}
                           },
                           buttonClipOvalRadius: widget.buttonClipOvalRadius,
