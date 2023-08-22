@@ -2,9 +2,10 @@ library flutter_dialpad;
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:flutter_dtmf/flutter_dtmf.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 
+/// here is where I made some updates on the package
 enum WhichTextField {
   first,
   second,
@@ -44,6 +45,7 @@ class DialPad extends StatefulWidget {
   // final List<String> searchResults;
   final BoxConstraints constraints;
   final List<String> searchHistory;
+  final TextStyle? searchHistoryItemsStyle;
 
   DialPad(
       {this.makeCall,
@@ -80,7 +82,10 @@ class DialPad extends StatefulWidget {
       this.searchIconSize,
       // this.searchResults = const [],
       this.constraints = const BoxConstraints(minWidth: 310, maxHeight: 380),
-      this.searchHistory = const []});
+      this.searchHistory = const [],
+      this.searchHistoryItemsStyle = const TextStyle(color: Colors.white, fontSize: 12),
+      }
+      );
 
   @override
   _DialPadState createState() => _DialPadState();
@@ -283,7 +288,10 @@ class _DialPadState extends State<DialPad> {
                                             itemBuilder: (BuildContext context,
                                                 int index) {
                                               return ListTile(
-                                                title: Text(list[index]),
+                                                title: Text(
+                                                  list[index],
+                                                  style: widget.searchHistoryItemsStyle,
+                                                ),
                                                 onTap: () {
                                                   setState(() {
                                                     controller
@@ -451,47 +459,51 @@ class _DialPadState extends State<DialPad> {
                       child: Icon(
                         Icons.backspace,
                         size: widget.deleteButtonSize ?? sizeFactor / 2,
-                        color: _value.length > 0 || _symbol.length > 0 
+                        color: _value.length > 0 || _symbol.length > 0
                             ? widget.backspaceButtonIconColor ??
                                 Theme.of(context).colorScheme.error
                             : Colors.white24,
                       ),
-                      onTap: firstOrSecond == WhichTextField.first ? ( _value.length > 0
-                          ? () {
-                              if (_value.length > 0) {
-                                setState(() {
-                                  _value =
-                                      _value.substring(0, _value.length - 1);
-                                  textEditingController!.text = _value;
-                                });
-                              }
-                            }
-                          : null) :  ( _symbol.length > 0
-                          ? () {
-                              if (_symbol.length > 0) {
-                                setState(() {
-                                  _symbol =
-                                      _symbol.substring(0, _symbol.length - 1);
-                                  pinTextEditingController!.text = _symbol;
-                                });
-                              }
-                            }
-                          : null),
-                      onLongPress: firstOrSecond == WhichTextField.first ?  (_value.length > 0
-                          ? () {
-                              setState(() {
-                                textEditingController!.clear();
-                                _value = "";
-                              });
-                            }
-                          : null) : (_symbol.length > 0
-                          ? () {
-                              setState(() {
-                                pinTextEditingController!.clear();
-                                _symbol = "";
-                              });
-                            }
-                          : null),
+                      onTap: firstOrSecond == WhichTextField.first
+                          ? (_value.length > 0
+                              ? () {
+                                  if (_value.length > 0) {
+                                    setState(() {
+                                      _value = _value.substring(
+                                          0, _value.length - 1);
+                                      textEditingController!.text = _value;
+                                    });
+                                  }
+                                }
+                              : null)
+                          : (_symbol.length > 0
+                              ? () {
+                                  if (_symbol.length > 0) {
+                                    setState(() {
+                                      _symbol = _symbol.substring(
+                                          0, _symbol.length - 1);
+                                      pinTextEditingController!.text = _symbol;
+                                    });
+                                  }
+                                }
+                              : null),
+                      onLongPress: firstOrSecond == WhichTextField.first
+                          ? (_value.length > 0
+                              ? () {
+                                  setState(() {
+                                    textEditingController!.clear();
+                                    _value = "";
+                                  });
+                                }
+                              : null)
+                          : (_symbol.length > 0
+                              ? () {
+                                  setState(() {
+                                    pinTextEditingController!.clear();
+                                    _symbol = "";
+                                  });
+                                }
+                              : null),
                     )),
               ),
             ],
