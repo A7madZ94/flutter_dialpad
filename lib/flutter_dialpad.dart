@@ -12,7 +12,8 @@ enum WhichTextField {
 }
 
 class DialPad extends StatefulWidget {
-  final ValueSetter<String>? makeCall;
+  final Function(String value, ValueKey<String> key)? makeCall;
+  final Function(String value, ValueKey<String> key)? extPinButton;
   final ValueSetter<String>? keyPressed;
   final bool? hideDialButton;
   final bool? hideSubtitle;
@@ -27,6 +28,7 @@ class DialPad extends StatefulWidget {
   // outputMask is the mask applied to the output text. Defaults to (000) 000-0000
   final String? outputMask;
   final bool? enableDtmf;
+  final ValueKey<String> key;
 
   /// here is where I made some updates on the package
   final double? buttonClipOvalRadius;
@@ -48,62 +50,64 @@ class DialPad extends StatefulWidget {
   final TextStyle? searchHistoryItemsStyle;
   final double extPinButtonFontSize;
 
-  DialPad(
-      {this.makeCall,
-      this.keyPressed,
-      this.hideDialButton,
-      this.hideSubtitle = false,
-      this.outputMask,
-      this.buttonColor,
-      this.buttonTextColor = Colors.white,
-      this.dialButtonColor,
-      this.dialButtonIconColor,
-      this.dialButtonIcon,
-      this.dialOutputTextColor,
-      this.backspaceButtonIconColor,
-      this.enableDtmf,
-      this.buttonClipOvalRadius = 36,
-      this.titleFontSize = 11,
-      this.subTitleFontSize = 6,
-      this.starIconSize = 25,
-      this.callIconSize = 16,
-      this.hashIconSize = 14,
-      this.deleteButtonSize = 25,
-      this.dialOutputTextFontSize = 13,
-      this.plusFontSize = 2,
-      this.searchContainerColor = Colors.white54,
-      this.heightSearchBar = 30,
-      this.searchIconSize = 16,
-      this.constraints = const BoxConstraints(minWidth: 338, maxHeight: 300),
-      this.searchHistory =  const [
-                    '1',
-                    '2',
-                    '3',
-                    '4',
-                    '5',
-                    '6',
-                    '7',
-                    '8',
-                    '9',
-                    '0',
-                    'A',
-                    'B',
-                    'C',
-                    'D',
-                    'E',
-                    'F'
-                  ],
-      this.inputDecoration = const InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
+  DialPad({
+    required this.key,
+    this.makeCall,
+    this.extPinButton,
+    this.keyPressed,
+    this.hideDialButton,
+    this.hideSubtitle = false,
+    this.outputMask,
+    this.buttonColor,
+    this.buttonTextColor = Colors.white,
+    this.dialButtonColor,
+    this.dialButtonIconColor,
+    this.dialButtonIcon,
+    this.dialOutputTextColor,
+    this.backspaceButtonIconColor,
+    this.enableDtmf,
+    this.buttonClipOvalRadius = 36,
+    this.titleFontSize = 11,
+    this.subTitleFontSize = 6,
+    this.starIconSize = 25,
+    this.callIconSize = 16,
+    this.hashIconSize = 14,
+    this.deleteButtonSize = 25,
+    this.dialOutputTextFontSize = 13,
+    this.plusFontSize = 2,
+    this.searchContainerColor = Colors.white54,
+    this.heightSearchBar = 30,
+    this.searchIconSize = 16,
+    this.constraints = const BoxConstraints(minWidth: 338, maxHeight: 300),
+    this.searchHistory = const [
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '0',
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F'
+    ],
+    this.inputDecoration = const InputDecoration(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
         ),
-      ),            
-      this.searchHistoryItemsStyle = const TextStyle(color: Colors.white, fontSize: 12),
-      this.extPinButtonFontSize = 12.5,
-      }
-      );
+      ),
+    ),
+    this.searchHistoryItemsStyle =
+        const TextStyle(color: Colors.white, fontSize: 12),
+    this.extPinButtonFontSize = 12.5,
+  });
 
   @override
   _DialPadState createState() => _DialPadState();
@@ -308,7 +312,8 @@ class _DialPadState extends State<DialPad> {
                                               return ListTile(
                                                 title: Text(
                                                   list[index],
-                                                  style: widget.searchHistoryItemsStyle,
+                                                  style: widget
+                                                      .searchHistoryItemsStyle,
                                                 ),
                                                 onTap: () {
                                                   setState(() {
@@ -387,13 +392,12 @@ class _DialPadState extends State<DialPad> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_symbol.isNotEmpty) {
-                        widget.makeCall!(_symbol);
+                        widget.extPinButton!(_symbol, widget.key);
                       }
                     },
-                    child: Text(
-                      'Ext/Pin:',
-                      style: TextStyle(fontSize: widget.extPinButtonFontSize)
-                    ),
+                    child: Text('Ext/Pin:',
+                        style:
+                            TextStyle(fontSize: widget.extPinButtonFontSize)),
                     style: ElevatedButton.styleFrom().copyWith(
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
@@ -456,9 +460,11 @@ class _DialPadState extends State<DialPad> {
                               : Colors.green,
                           hideSubtitle: widget.hideSubtitle!,
                           onTap: (value) {
-                            if (_value.isNotEmpty || _symbol.isNotEmpty) {
-                              widget.makeCall!(_value);
-                            }
+                            if (_value.isNotEmpty) {
+                              widget.makeCall!(_value, widget.key);
+                            } else if (_symbol.isNotEmpty) {
+                              widget.makeCall!(_symbol, widget.key);
+                            } else {}
                           },
                           buttonClipOvalRadius: widget.buttonClipOvalRadius,
                           titleFontSize: widget.titleFontSize,
