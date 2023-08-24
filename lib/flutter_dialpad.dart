@@ -30,7 +30,7 @@ class DialPad extends StatefulWidget {
   final bool? enableDtmf;
 
   /// here is where I made some updates on the package
-  final ValueKey<String>? key;
+  final ValueKey<String> keyOfTheWidget;
   final double? buttonClipOvalRadius;
   final double? titleFontSize;
   final double? subTitleFontSize;
@@ -45,13 +45,14 @@ class DialPad extends StatefulWidget {
   final Color? searchContainerColor;
   final double? searchIconSize;
   // final List<String> searchResults;
-  final BoxConstraints constraints;
+  final BoxConstraints? constraints;
   final List<String> searchHistory;
   final TextStyle? searchHistoryItemsStyle;
-  final double extPinButtonFontSize;
+  final double? extPinButtonFontSize;
 
   DialPad({
-    this.key,
+    Key? key,
+    required this.keyOfTheWidget,
     this.makeCall,
     this.extPinButton,
     this.keyPressed,
@@ -107,7 +108,7 @@ class DialPad extends StatefulWidget {
     this.searchHistoryItemsStyle =
         const TextStyle(color: Colors.white, fontSize: 12),
     this.extPinButtonFontSize = 12.5,
-  });
+  }): super(key: key);
 
   @override
   _DialPadState createState() => _DialPadState();
@@ -392,7 +393,7 @@ class _DialPadState extends State<DialPad> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_symbol.isNotEmpty) {
-                        widget.extPinButton!(_symbol, widget.key!);
+                        widget.extPinButton!(_symbol, widget.keyOfTheWidget);
                       }
                     },
                     child: Text('Ext/Pin:',
@@ -461,9 +462,9 @@ class _DialPadState extends State<DialPad> {
                           hideSubtitle: widget.hideSubtitle!,
                           onTap: (value) {
                             if (_value.isNotEmpty) {
-                              widget.makeCall!(_value, widget.key!);
+                              widget.makeCall!(_value, widget.keyOfTheWidget);
                             } else if (_symbol.isNotEmpty) {
-                              widget.makeCall!(_symbol, widget.key!);
+                              widget.makeCall!(_symbol, widget.keyOfTheWidget);
                             } else {}
                           },
                           buttonClipOvalRadius: widget.buttonClipOvalRadius,
